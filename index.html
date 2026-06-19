@@ -193,31 +193,162 @@
 const API_KEY = 'AIzaSyD8N6FMrazmoy3SUYjlXmBsLJsVlS6oY0g';
 
 const STORES = [
-  { name: "Perfumes Europeos - Ate",                    address: "Auxiliar Nicolas Ayllon 5290, Lima, Peru" },
-  { name: "Perfumes Europeos - Breña",                  address: "Av. Venezuela 771, Breña, Lima, Peru" },
-  { name: "Perfumes Europeos - Gamarra 1",              address: "Jr. Gamarra 778, La Victoria, Lima, Peru" },
-  { name: "Perfumes Europeos - Gamarra 2",              address: "Jr. Gamarra 607, La Victoria, Lima, Peru" },
-  { name: "Perfumes Europeos - Independencia",          address: "Calle 1 115, Independencia, Lima, Peru" },
-  { name: "Perfumes Europeos - Jesús Maria",            address: "Jr. Jose Arnaldo Marquez 1391, Jesús María, Lima, Peru" },
-  { name: "Perfumes Europeos - Jr. Andahuaylas",        address: "Jr. Andahuaylas 770, Lima, Peru" },
-  { name: "Perfumes Europeos - Jr. de la Unión 1039",   address: "Jirón de la Unión 1039, Lima, Peru" },
-  { name: "Perfumes Europeos - Jr. de la Unión 419",    address: "Jirón de la Unión 419, Lima, Peru" },
-  { name: "Perfumes Europeos - Jr. Puno",               address: "Jr. Puno 542, Lima, Peru" },
-  { name: "Perfumes Europeos - Jr. Ucayali",            address: "Jr. Ucayali 219, Lima, Peru" },
-  { name: "Perfumes Europeos - La Molina",              address: "Av. la Molina 1167, La Molina, Lima, Peru" },
-  { name: "Perfumes Europeos - Lince",                  address: "Av. Ignacio Merino 2230, Lince, Lima, Peru" },
-  { name: "Perfumes Europeos - Los Olivos",             address: "Av. Alfredo Mendiola 3765, Los Olivos, Lima, Peru" },
-  { name: "Perfumes Europeos - Lurín",                  address: "Antigua Panamericana Sur 1257, Lurín, Lima, Peru" },
-  { name: "Perfumes Europeos - Magdalena",              address: "Jirón José Gálvez 520, Magdalena del Mar, Lima, Peru" },
-  { name: "Perfumes Europeos - Miraflores",             address: "Av. José A. Larco 778, Miraflores, Lima, Peru" },
-  { name: "Perfumes Europeos - Puno 2",                 address: "Jr. Puno 451, Lima, Peru" },
-  { name: "Perfumes Europeos - San Juan de Lurigancho", address: "Av. Gran Chimu 748, San Juan de Lurigancho, Lima, Peru" },
-  { name: "Perfumes Europeos - San Juan de Miraflores", address: "Av. San Juan 1110, San Juan de Miraflores, Lima, Peru" },
-  { name: "Perfumes Europeos - Santa Anita",            address: "Av. Las Alondras 165, Santa Anita, Lima, Peru" },
-  { name: "Perfumes Europeos - Surquillo",              address: "Av. Angamos Este 2576, Surquillo, Lima, Peru" },
-  { name: "Perfumes Europeos - Trujillo",               address: "Jr. Gamarra 751, Trujillo, Peru" },
-  { name: "Perfumes Europeos Perú - Jr. De la Union",   address: "Jr. De la Union 851, Lima, Peru" },
-  { name: "Perfumes Europeos Perú - Jiron Ayacucho",    address: "Jiron Ayacucho 739, Lima, Peru" },
+  {
+    storeCode: "01088167670648378121",
+    name: "Perfumes Europeos - Breña",
+    address: "Av. Venezuela 771, Breña 15082, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "02138719608651328127",
+    name: "Perfumes Europeos - Puno 2",
+    address: "Jr. Puno 451 - Stand 181, Cercado de Lima 15001, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "02943805461209440618",
+    name: "Perfumes Europeos - La Molina",
+    address: "Centro Comercial, Av. la Molina 1167, La Molina 15024, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "02997842565461978714",
+    name: "Perfumes Europeos Perú",
+    address: "Jr. De la Union 851, Lima, Peru",
+    googleStatus: "Duplicado"
+  },
+  {
+    storeCode: "04870891988438982966",
+    name: "Perfumes Europeos - Ate",
+    address: "Auxiliar Nicolas Ayllon 5290, Ate 15494, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "05016595645805932858",
+    name: "Perfumes Europeos - Jr. Ucayali",
+    address: "Jr. Ucayali 219, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "05111500167607162191",
+    name: "Perfumes Europeos - Jr. Puno",
+    address: "Jr. Puno 542 - Galería Puno, Lima 15001, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "06241745536898984752",
+    name: "Perfumes Europeos - San Juan de Lurigancho",
+    address: "Av. Gran Chimu 748, San Juan de Lurigancho, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "06263084366698606975",
+    name: "Perfumes Europeos - Lurín",
+    address: "Antigua Panamericana Sur 1257, Plaza Vea Lurín, Lurín 15823, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "06771178853729467441",
+    name: "Perfumes Europeos Perú",
+    address: "Jiron Ayacucho 739, Lima 15001, Peru",
+    googleStatus: "Verificada",
+    note: "Marcada como cerrada por Google"
+  },
+  {
+    storeCode: "07137088300564311214",
+    name: "Perfumes Europeos - Miraflores",
+    address: "Av. José Larco 778, Miraflores, Lima, Peru",
+    googleStatus: "Verificada",
+    searchQueries: [
+      "Perfumes Europeos Av. José Larco 778 Miraflores Lima Perú",
+      "Perfumes Europeos Miraflores Av Larco 778",
+      "Av. José Larco 778 Miraflores Perfumes Europeos"
+    ]
+  },
+  {
+    storeCode: "07498721975824913318",
+    name: "Perfumes Europeos - Magdalena",
+    address: "Jirón José Gálvez 520, Magdalena del Mar 15086, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "07550326836361299447",
+    name: "Perfumes Europeos - Jr. de la Unión",
+    address: "Jirón de la Unión 1039, Lima 15001, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "08543799718991628569",
+    name: "Perfumes Europeos - Santa Anita",
+    address: "Av. Las Alondras 165, Santa Anita 15009, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "08707589722150019156",
+    name: "Perfumes Europeos - San Juan de Miraflores",
+    address: "Av. San Juan 1110, San Juan de Miraflores, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "09490436345871046646",
+    name: "Perfumes Europeos - Los Olivos",
+    address: "Av. Alfredo Mendiola 3765, Los Olivos 15311, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "11651168135345126387",
+    name: "Perfumes Europeos - Lince",
+    address: "Av. Ignacio Merino 2230, Lince, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "12161127468572162589",
+    name: "Perfumes Europeos - Independencia",
+    address: "Calle 1 115, Independencia, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "13542055745304709566",
+    name: "Perfumes Europeos - Trujillo",
+    address: "Jr. Gamarra 751, Trujillo 13001, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "14386088636444856687",
+    name: "Perfumes Europeos - Gamarra 2",
+    address: "Jr. Gamarra 607, La Victoria, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "14760098416601218861",
+    name: "Perfumes Europeos - Jr. de la Unión",
+    address: "Jirón de la Unión 419, Lima 15001, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "14781804421642096911",
+    name: "Perfumes Europeos - Surquillo",
+    address: "Av. Angamos Este 2576, Surquillo 15048, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "16122381915630851376",
+    name: "Perfumes Europeos - Jesús Maria",
+    address: "Jr. Jose Arnaldo Marquez 1391, Jesús María, Lima, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "17592848526533956759",
+    name: "Perfumes Europeos - Jr. Andahuaylas",
+    address: "Jr. Andahuaylas 770, Lima 15001, Peru",
+    googleStatus: "Verificada"
+  },
+  {
+    storeCode: "18322778955693592102",
+    name: "Perfumes Europeos - Gamarra 1",
+    address: "Jr. Gamarra 778, La Victoria 15018, Lima, Peru",
+    googleStatus: "Verificada"
+  }
 ];
 
 let storesData = [];
@@ -238,7 +369,11 @@ function startLoad() {
   document.getElementById('btn-load').disabled = true;
   document.getElementById('btn-load').textContent = 'Cargando...';
   document.getElementById('progress-wrap').classList.add('visible');
-  document.getElementById('stores-grid').innerHTML = '<div class="state-box" style="grid-column:1/-1"><p>Consultando Google Places para las 25 tiendas...</p></div>';
+  document.getElementById('kpi-total').textContent = STORES.length;
+  document.getElementById('stores-grid').innerHTML =
+  `<div class="state-box" style="grid-column:1/-1">
+    <p>Consultando Google Places para las ${STORES.length} tiendas...</p>
+  </div>`;
   document.getElementById('table-section').style.display = 'none';
 
   storesData = STORES.map(s => ({ ...s, rating: null, reviews: null, placeId: null, foundName: null, foundAddress: null }));
@@ -250,27 +385,81 @@ function startLoad() {
   });
 }
 
-function searchStore(store, idx) {
+function getSearchQueries(store) {
+  if (store.searchQueries && store.searchQueries.length > 0) {
+    return store.searchQueries;
+  }
+
+  return [
+    `${store.name} ${store.address}`,
+    `${store.address} ${store.name}`,
+    `${store.name.replace("Perfumes Europeos - ", "Perfumes Europeos ")} ${store.address}`
+  ];
+}
+
+function searchStore(store, idx, attempt = 0) {
+  const queries = getSearchQueries(store);
+  const query = queries[attempt];
+
   const request = {
-    query: `${store.name} ${store.address}`,
-    fields: ['place_id', 'name', 'rating', 'user_ratings_total', 'formatted_address', 'business_status'],
+    query: query,
+    fields: [
+      'place_id',
+      'name',
+      'rating',
+      'user_ratings_total',
+      'formatted_address',
+      'business_status'
+    ],
   };
 
+  console.log(`Buscando tienda ${store.storeCode} | Intento ${attempt + 1}:`, query);
+
   service.findPlaceFromQuery(request, (results, status) => {
+    console.log(`Resultado ${store.storeCode} - ${store.name}:`, status, results);
+
     if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
       const p = results[0];
-      storesData[idx].rating       = p.rating || null;
-      storesData[idx].reviews      = p.user_ratings_total || null;
-      storesData[idx].placeId      = p.place_id || null;
-      storesData[idx].foundName    = p.name || store.name;
-      storesData[idx].foundAddress = p.formatted_address || store.address;
-      storesData[idx].status       = p.business_status || null;
+
+      storesData[idx].rating       = p.rating ?? null;
+      storesData[idx].reviews      = p.user_ratings_total ?? null;
+      storesData[idx].placeId      = p.place_id ?? null;
+      storesData[idx].foundName    = p.name ?? store.name;
+      storesData[idx].foundAddress = p.formatted_address ?? store.address;
+      storesData[idx].status       = p.business_status ?? null;
+      storesData[idx].apiStatus    = status;
+
+      finishStoreLoad();
+      return;
     }
-    loaded++;
-    updateProgress(loaded);
-    renderCards();
-    if (loaded === STORES.length) onAllLoaded();
+
+    if (attempt + 1 < queries.length) {
+      searchStore(store, idx, attempt + 1);
+      return;
+    }
+
+    storesData[idx].rating       = null;
+    storesData[idx].reviews      = null;
+    storesData[idx].placeId      = null;
+    storesData[idx].foundName    = store.name;
+    storesData[idx].foundAddress = store.address;
+    storesData[idx].status       = null;
+    storesData[idx].apiStatus    = status;
+
+    console.warn(`No cargó la tienda ${store.storeCode} - ${store.name}. Estado API:`, status);
+
+    finishStoreLoad();
   });
+}
+
+function finishStoreLoad() {
+  loaded++;
+  updateProgress(loaded);
+  renderCards();
+
+  if (loaded === STORES.length) {
+    onAllLoaded();
+  }
 }
 
 function updateProgress(n) {
