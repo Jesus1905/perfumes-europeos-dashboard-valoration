@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfumes Europeos — Dashboard de Valoraciones</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #B8972A; --gold-light: #F0DFA0; --gold-pale: #FAF6E8;
+    --ink: #1A1714; --ink-mid: #4A4540; --ink-soft: #8A8278;
+    --surface: #FDFBF7; --border: #E8E0D0;
+    --green: #2D6A4F; --green-bg: #EAF4EE;
+    --red: #9B2335; --red-bg: #FAECEE;
+    --amber: #8A6000; --amber-bg: #FFF5DC;
+  }
+  body { font-family: 'Inter', sans-serif; background: var(--surface); color: var(--ink); min-height: 100vh; }
+
+  header {
+    background: var(--ink); color: #fff;
+    padding: 28px 40px 24px;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+  }
+  .brand-name { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--gold-light); }
+  .brand-sub { font-size: 12px; color: #9A8F80; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
+  .header-meta { font-size: 12px; color: #9A8F80; text-align: right; }
+  #last-updated { color: var(--gold-light); font-weight: 500; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+  .kpi { background: var(--surface); padding: 24px 32px; display: flex; flex-direction: column; gap: 6px; }
+  .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); font-weight: 500; }
+  .kpi-value { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--ink); line-height: 1; }
+  .kpi-value.gold { color: var(--gold); }
+  .kpi-sub { font-size: 12px; color: var(--ink-soft); }
+
+  .toolbar { padding: 16px 40px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .toolbar-label { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; }
+  .filter-btn { border: 1px solid var(--border); background: white; border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--ink-mid); cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-btn.active { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+  .search-input { margin-left: auto; border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-family: 'Inter', sans-serif; color: var(--ink); background: white; outline: none; width: 200px; }
+  .search-input:focus { border-color: var(--gold); }
+  .btn-refresh { background: var(--gold); color: var(--ink); border: none; border-radius: 6px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+  .btn-refresh:hover { opacity: 0.85; }
+  .btn-refresh:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .progress-bar-wrap { display: none; padding: 10px 40px; background: var(--gold-pale); border-bottom: 1px solid var(--border); align-items: center; gap: 12px; }
+  .progress-bar-wrap.visible { display: flex; }
+  .progress-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.3s ease; width: 0%; }
+  .progress-label { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
+
+  main { padding: 32px 40px; }
+
+  .state-box { text-align: center; padding: 60px 20px; color: var(--ink-soft); }
+  .state-box p { font-size: 14px; }
+
+  #stores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+
+  .store-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: box-shadow 0.15s, border-color 0.15s; position: relative; }
+  .store-card:hover { border-color: var(--gold); box-shadow: 0 4px 16px rgba(184,151,42,0.1); }
+  .store-rank { position: absolute; top: 14px; right: 16px; font-size: 11px; color: var(--ink-soft); font-weight: 600; }
+  .store-name { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--ink); line-height: 1.3; padding-right: 32px; }
+  .store-address { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  .store-rating-row { display: flex; align-items: center; gap: 10px; }
+  .rating-number { font-family: 'DM Serif Display', serif; font-size: 28px; line-height: 1; }
+  .rating-number.high { color: var(--green); }
+  .rating-number.mid  { color: var(--amber); }
+  .rating-number.low  { color: var(--red); }
+  .rating-number.na   { color: var(--ink-soft); font-size: 20px; }
+  .stars { display: flex; gap: 2px; }
+  .star.full  { color: var(--gold); font-size: 14px; }
+  .star.half  { color: var(--gold); opacity: 0.6; font-size: 14px; }
+  .star.empty { color: var(--border); font-size: 14px; }
+  .rating-bar-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .rating-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+  .rating-bar-fill.high { background: var(--green); }
+  .rating-bar-fill.mid  { background: var(--amber); }
+  .rating-bar-fill.low  { background: var(--red); }
+  .store-badge { display: inline-flex; align-items: center; border-radius: 4px; padding: 3px 8px; font-size: 11px; font-weight: 600; width: fit-content; }
+  .badge-high { background: var(--green-bg); color: var(--green); }
+  .badge-mid  { background: var(--amber-bg); color: var(--amber); }
+  .badge-low  { background: var(--red-bg); color: var(--red); }
+  .badge-na   { background: #F0EDE8; color: var(--ink-soft); }
+
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); margin-bottom: 16px; padding-top: 40px; border-top: 1px solid var(--border); margin-top: 40px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { text-align: left; padding: 10px 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); font-weight: 500; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  thead th:hover { color: var(--gold); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:hover { background: var(--gold-pale); }
+  tbody td { padding: 12px 14px; color: var(--ink-mid); }
+  tbody td:first-child { font-weight: 600; color: var(--ink-soft); width: 40px; }
+  .td-name { font-weight: 500; color: var(--ink); }
+
+  /* Mapa oculto requerido por la API */
+  #map { width: 1px; height: 1px; position: absolute; top: -9999px; left: -9999px; }
+
+  footer { text-align: center; padding: 32px 40px; font-size: 12px; color: var(--ink-soft); border-top: 1px solid var(--border); margin-top: 40px; }
+
+  @media (max-width: 768px) {
+    header, .toolbar, main { padding-left: 16px; padding-right: 16px; }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .kpi { padding: 16px; }
+    .kpi-value { font-size: 28px; }
+    #stores-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand-name">Perfumes Europeos</div>
+    <div class="brand-sub">Dashboard de valoraciones · Google Places</div>
+  </div>
+  <div class="header-meta">
+    Última actualización<br>
+    <span id="last-updated">—</span>
+    <br><br>
+    <button class="btn-refresh" id="btn-load" onclick="startLoad()">Cargar datos</button>
+  </div>
+</header>
+
+<div class="kpi-row">
+  <div class="kpi">
+    <div class="kpi-label">Tiendas</div>
+    <div class="kpi-value" id="kpi-total">25</div>
+    <div class="kpi-sub">en seguimiento</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Rating promedio</div>
+    <div class="kpi-value gold" id="kpi-avg">—</div>
+    <div class="kpi-sub" id="kpi-avg-sub">cargando...</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Total reseñas</div>
+    <div class="kpi-value" id="kpi-reviews">—</div>
+    <div class="kpi-sub">acumuladas</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">Mejor tienda</div>
+    <div class="kpi-value gold" id="kpi-best" style="font-size:18px;padding-top:6px;">—</div>
+    <div class="kpi-sub" id="kpi-best-sub">—</div>
+  </div>
+</div>
+
+<div class="progress-bar-wrap" id="progress-wrap">
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="progress-label" id="progress-label">Consultando tiendas...</div>
+</div>
+
+<div class="toolbar">
+  <span class="toolbar-label">Filtrar</span>
+  <button class="filter-btn active" onclick="setFilter('all',this)">Todas</button>
+  <button class="filter-btn" onclick="setFilter('high',this)">★ 4.5+</button>
+  <button class="filter-btn" onclick="setFilter('mid',this)">★ 3.5 – 4.4</button>
+  <button class="filter-btn" onclick="setFilter('low',this)">★ Menos de 3.5</button>
+  <button class="filter-btn" onclick="setFilter('nodata',this)">Sin datos</button>
+  <input class="search-input" type="text" placeholder="Buscar tienda..." id="search-input" oninput="renderCards()" />
+</div>
+
+<main>
+  <div id="stores-grid">
+    <div class="state-box" style="grid-column:1/-1">
+      <p>Haz clic en <strong>Cargar datos</strong> para consultar Google Places.</p>
+    </div>
+  </div>
+  <div id="table-section" style="display:none">
+    <div class="section-title">Ranking completo</div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tienda</th>
+          <th>Rating</th>
+          <th>Reseñas</th>
+          <th>Estado</th>
+          <th>Dirección encontrada</th>
+        </tr>
+      </thead>
+      <tbody id="ranking-body"></tbody>
+    </table>
+  </div>
+</main>
+
+<div id="map"></div>
+
+<footer>Datos en tiempo real desde Google Places API · Proyecto Perfumes-Europeos-Reviews</footer>
+
+<script>
+const API_KEY = 'AIzaSyD8N6FMrazmoy3SUYjlXmBsLJsVlS6oY0g';
+
+const STORES = [
+  { name: "Perfumes Europeos - Ate",                    address: "Auxiliar Nicolas Ayllon 5290, Lima, Peru" },
+  { name: "Perfumes Europeos - Breña",                  address: "Av. Venezuela 771, Breña, Lima, Peru" },
+  { name: "Perfumes Europeos - Gamarra 1",              address: "Jr. Gamarra 778, La Victoria, Lima, Peru" },
+  { name: "Perfumes Europeos - Gamarra 2",              address: "Jr. Gamarra 607, La Victoria, Lima, Peru" },
+  { name: "Perfumes Europeos - Independencia",          address: "Calle 1 115, Independencia, Lima, Peru" },
+  { name: "Perfumes Europeos - Jesús Maria",            address: "Jr. Jose Arnaldo Marquez 1391, Jesús María, Lima, Peru" },
+  { name: "Perfumes Europeos - Jr. Andahuaylas",        address: "Jr. Andahuaylas 770, Lima, Peru" },
+  { name: "Perfumes Europeos - Jr. de la Unión 1039",   address: "Jirón de la Unión 1039, Lima, Peru" },
+  { name: "Perfumes Europeos - Jr. de la Unión 419",    address: "Jirón de la Unión 419, Lima, Peru" },
+  { name: "Perfumes Europeos - Jr. Puno",               address: "Jr. Puno 542, Lima, Peru" },
+  { name: "Perfumes Europeos - Jr. Ucayali",            address: "Jr. Ucayali 219, Lima, Peru" },
+  { name: "Perfumes Europeos - La Molina",              address: "Av. la Molina 1167, La Molina, Lima, Peru" },
+  { name: "Perfumes Europeos - Lince",                  address: "Av. Ignacio Merino 2230, Lince, Lima, Peru" },
+  { name: "Perfumes Europeos - Los Olivos",             address: "Av. Alfredo Mendiola 3765, Los Olivos, Lima, Peru" },
+  { name: "Perfumes Europeos - Lurín",                  address: "Antigua Panamericana Sur 1257, Lurín, Lima, Peru" },
+  { name: "Perfumes Europeos - Magdalena",              address: "Jirón José Gálvez 520, Magdalena del Mar, Lima, Peru" },
+  { name: "Perfumes Europeos - Miraflores",             address: "Av. Jose A. Larco 778, Miraflores, Lima, Peru" },
+  { name: "Perfumes Europeos - Puno 2",                 address: "Jr. Puno 451, Lima, Peru" },
+  { name: "Perfumes Europeos - San Juan de Lurigancho", address: "Av. Gran Chimu 748, San Juan de Lurigancho, Lima, Peru" },
+  { name: "Perfumes Europeos - San Juan de Miraflores", address: "Av. San Juan 1110, San Juan de Miraflores, Lima, Peru" },
+  { name: "Perfumes Europeos - Santa Anita",            address: "Av. Las Alondras 165, Santa Anita, Lima, Peru" },
+  { name: "Perfumes Europeos - Surquillo",              address: "Av. Angamos Este 2576, Surquillo, Lima, Peru" },
+  { name: "Perfumes Europeos - Trujillo",               address: "Jr. Gamarra 751, Trujillo, Peru" },
+  { name: "Perfumes Europeos Perú - Jr. De la Union",   address: "Jr. De la Union 851, Lima, Peru" },
+  { name: "Perfumes Europeos Perú - Jiron Ayacucho",    address: "Jiron Ayacucho 739, Lima, Peru" },
+];
+
+let storesData = [];
+let currentFilter = 'all';
+let service = null;
+let loaded = 0;
+
+function initMap() {
+  const map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: -12.046374, lng: -77.042793 },
+    zoom: 12
+  });
+  service = new google.maps.places.PlacesService(map);
+}
+
+function startLoad() {
+  if (!service) { alert('La API de Google Maps aún no ha cargado. Espera un momento e intenta de nuevo.'); return; }
+  document.getElementById('btn-load').disabled = true;
+  document.getElementById('btn-load').textContent = 'Cargando...';
+  document.getElementById('progress-wrap').classList.add('visible');
+  document.getElementById('stores-grid').innerHTML = '<div class="state-box" style="grid-column:1/-1"><p>Consultando Google Places para las 25 tiendas...</p></div>';
+  document.getElementById('table-section').style.display = 'none';
+
+  storesData = STORES.map(s => ({ ...s, rating: null, reviews: null, placeId: null, foundName: null, foundAddress: null }));
+  loaded = 0;
+  updateProgress(0);
+
+  STORES.forEach((store, idx) => {
+    setTimeout(() => searchStore(store, idx), idx * 300);
+  });
+}
+
+function searchStore(store, idx) {
+  const request = {
+    query: `${store.name} ${store.address}`,
+    fields: ['place_id', 'name', 'rating', 'user_ratings_total', 'formatted_address', 'business_status'],
+  };
+
+  service.findPlaceFromQuery(request, (results, status) => {
+    if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
+      const p = results[0];
+      storesData[idx].rating       = p.rating || null;
+      storesData[idx].reviews      = p.user_ratings_total || null;
+      storesData[idx].placeId      = p.place_id || null;
+      storesData[idx].foundName    = p.name || store.name;
+      storesData[idx].foundAddress = p.formatted_address || store.address;
+      storesData[idx].status       = p.business_status || null;
+    }
+    loaded++;
+    updateProgress(loaded);
+    renderCards();
+    if (loaded === STORES.length) onAllLoaded();
+  });
+}
+
+function updateProgress(n) {
+  const pct = Math.round((n / STORES.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${n} / ${STORES.length} tiendas consultadas`;
+}
+
+function onAllLoaded() {
+  updateKPIs();
+  renderTable();
+  document.getElementById('table-section').style.display = 'block';
+  document.getElementById('last-updated').textContent = new Date().toLocaleString('es-PE');
+  document.getElementById('btn-load').disabled = false;
+  document.getElementById('btn-load').textContent = 'Actualizar';
+  setTimeout(() => document.getElementById('progress-wrap').classList.remove('visible'), 1500);
+}
+
+function ratingClass(r) {
+  if (r === null) return 'na';
+  if (r >= 4.5) return 'high';
+  if (r >= 3.5) return 'mid';
+  return 'low';
+}
+
+function badgeLabel(r) {
+  if (r === null) return 'Sin datos';
+  if (r >= 4.5) return 'Excelente';
+  if (r >= 3.5) return 'Buena';
+  return 'Mejorar';
+}
+
+function starsHTML(rating) {
+  if (rating === null) return '<span style="color:var(--ink-soft);font-size:12px">—</span>';
+  let html = '';
+  for (let i = 1; i <= 5; i++) {
+    if (rating >= i) html += '<span class="star full">★</span>';
+    else if (rating >= i - 0.5) html += '<span class="star half">★</span>';
+    else html += '<span class="star empty">★</span>';
+  }
+  return html;
+}
+
+function renderCards() {
+  const filter = currentFilter;
+  const search = document.getElementById('search-input').value.toLowerCase();
+
+  const sorted = [...storesData].sort((a, b) => {
+    if (a.rating === null && b.rating === null) return 0;
+    if (a.rating === null) return 1;
+    if (b.rating === null) return -1;
+    return b.rating - a.rating;
+  });
+
+  const visible = sorted.filter(s => {
+    if (search && !s.name.toLowerCase().includes(search)) return false;
+    const rc = ratingClass(s.rating);
+    if (filter === 'all') return true;
+    if (filter === 'high') return rc === 'high';
+    if (filter === 'mid') return rc === 'mid';
+    if (filter === 'low') return rc === 'low';
+    if (filter === 'nodata') return s.rating === null;
+    return true;
+  });
+
+  if (visible.length === 0) {
+    document.getElementById('stores-grid').innerHTML = '<div class="state-box" style="grid-column:1/-1"><p>No hay tiendas que coincidan.</p></div>';
+    return;
+  }
+
+  document.getElementById('stores-grid').innerHTML = visible.map((s) => {
+    const rc = ratingClass(s.rating);
+    const pct = s.rating ? ((s.rating / 5) * 100).toFixed(0) : 0;
+    const rank = sorted.indexOf(s) + 1;
+    return `
+    <div class="store-card">
+      <span class="store-rank">#${rank}</span>
+      <div class="store-name">${s.name}</div>
+      <div class="store-address">${s.foundAddress || s.address}</div>
+      <div class="store-rating-row">
+        <div class="rating-number ${rc}">${s.rating !== null ? s.rating.toFixed(1) : '—'}</div>
+        <div>
+          <div class="stars">${starsHTML(s.rating)}</div>
+          <div style="font-size:11px;color:var(--ink-soft);margin-top:2px">${s.reviews !== null ? s.reviews.toLocaleString('es') + ' reseñas' : 'Sin datos'}</div>
+        </div>
+      </div>
+      <div class="rating-bar-track">
+        <div class="rating-bar-fill ${rc}" style="width:${pct}%"></div>
+      </div>
+      <span class="store-badge badge-${rc}">${badgeLabel(s.rating)}</span>
+    </div>`;
+  }).join('');
+}
+
+function updateKPIs() {
+  const withData = storesData.filter(s => s.rating !== null);
+  if (!withData.length) return;
+  const avg = withData.reduce((a, b) => a + b.rating, 0) / withData.length;
+  const totalReviews = withData.reduce((a, b) => a + (b.reviews || 0), 0);
+  const best = [...withData].sort((a, b) => b.rating - a.rating)[0];
+  document.getElementById('kpi-avg').textContent = avg.toFixed(2);
+  document.getElementById('kpi-avg-sub').textContent = `sobre ${withData.length} tiendas con datos`;
+  document.getElementById('kpi-reviews').textContent = totalReviews.toLocaleString('es');
+  document.getElementById('kpi-best').textContent = best.rating.toFixed(1) + ' ★';
+  document.getElementById('kpi-best-sub').textContent = best.name.replace('Perfumes Europeos - ','').replace('Perfumes Europeos Perú - ','');
+}
+
+function renderTable() {
+  const sorted = [...storesData].sort((a, b) => {
+    if (a.rating === null && b.rating === null) return 0;
+    if (a.rating === null) return 1;
+    if (b.rating === null) return -1;
+    return b.rating - a.rating;
+  });
+
+  document.getElementById('ranking-body').innerHTML = sorted.map((s, i) => {
+    const rc = ratingClass(s.rating);
+    return `<tr>
+      <td>${i + 1}</td>
+      <td class="td-name">${s.name}</td>
+      <td>
+        <span class="rating-number ${rc}" style="font-size:16px">${s.rating !== null ? s.rating.toFixed(1) : '—'}</span>
+        <span style="margin-left:6px">${starsHTML(s.rating)}</span>
+      </td>
+      <td>${s.reviews !== null ? s.reviews.toLocaleString('es') : '—'}</td>
+      <td><span class="store-badge badge-${rc}">${badgeLabel(s.rating)}</span></td>
+      <td style="font-size:12px;color:var(--ink-soft)">${(s.foundAddress || s.address).replace(', Peru','').replace(', Lima','')}</td>
+    </tr>`;
+  }).join('');
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8N6FMrazmoy3SUYjlXmBsLJsVlS6oY0g&libraries=places&callback=initMap" async defer></script>
+
+</body>
+</html>
