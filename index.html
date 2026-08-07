@@ -3,32 +3,149 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Perfumes Europeos — Dashboard de Valoraciones</title>
+<title>Perfumarte — Dashboard de Valoraciones</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --gold: #B8972A; --gold-light: #F0DFA0; --gold-pale: #FAF6E8;
-      --ink: #1A1714; --ink-mid: #4A4540; --ink-soft: #8A8278;
-      --surface: #FDFBF7; --border: #E8E0D0;
-      --green: #2D6A4F; --green-bg: #EAF4EE;
-      --red: #9B2335; --red-bg: #FAECEE;
-      --amber: #8A6000; --amber-bg: #FFF5DC;
-    }
-    body { font-family: 'Inter', sans-serif; background: var(--surface); color: var(--ink); min-height: 100vh; }
+  /* ===== PERFUMARTE BRAND PALETTE ===== */
+  --orange: #F36C21;
+  --orange-light: #FF8A47;
+  --orange-dark: #D95612;
+  --orange-pale: #FFF1E8;
+
+  --blue: #013a71;
+  --blue-light: #013a71;
+  --blue-dark: #013a71;
+  --blue-pale: #EAF1FA;
+
+  --ink: #172033;
+  --ink-mid: #4C566A;
+  --ink-soft: #8992A3;
+
+  --surface: #FFFFFF;
+  --surface-soft: #F7F9FC;
+  --border: #E3E8F0;
+
+  /* Estados KPI */
+  --green: #23865B;
+  --green-bg: #E8F6EF;
+  --red: #D64545;
+  --red-bg: #FDECEC;
+  --amber: #E59A19;
+  --amber-bg: #FFF4DD;
+
+  /* Alias para mantener compatibilidad con el código existente */
+  --gold: var(--orange);
+  --gold-light: var(--orange-light);
+  --gold-pale: var(--orange-pale);
+  --gold-dark: var(--orange-dark);
+}
+    body { font-family: 'Inter', sans-serif; background: var(--surface-soft); color: var(--ink); min-height: 100vh; }
 
     header {
-      background: var(--ink); color: #fff;
-      padding: 28px 40px 24px;
-      display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 68%, #2C67B5 100%);
+      color: #fff;
+      padding: 18px 40px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 5px solid var(--orange);
+      position: relative;
+      overflow: hidden;
     }
-    .brand-name { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--gold-light); }
-    .brand-sub { font-size: 12px; color: #9A8F80; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
-    .header-meta { font-size: 12px; color: #9A8F80; text-align: right; }
-    #last-updated { color: var(--gold-light); font-weight: 500; }
+
+    header::before {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 70%);
+      pointer-events: none;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-box {
+      width: 88px;
+      height: 72px;
+      background: transparent;
+      border: none;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex: 0 0 auto;
+      position: relative;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+
+    .logo-box img {
+      width: 125%;
+      height: 125%;
+      object-fit: contain;
+      display: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.08));
+    }
+
+    .logo-placeholder {
+      padding: 10px;
+      color: #fff;
+      font-size: 11px;
+      line-height: 1.2;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+    .brand-copy {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .dashboard-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    
+
+    .header-meta {
+      font-size: 12px;
+      color: #D7E4F5;
+      text-align: right;
+      flex: 0 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    #last-updated {
+      color: #fff;
+      font-weight: 600;
+    }
 
     .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
-    .kpi { background: var(--surface); padding: 24px 32px; display: flex; flex-direction: column; gap: 6px; }
+    .kpi { background: #fff; padding: 24px 32px; display: flex; flex-direction: column; gap: 6px; }
     .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); font-weight: 500; }
     .kpi-value { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--ink); line-height: 1; }
     .kpi-value.gold { color: var(--gold); }
@@ -38,20 +155,20 @@
     .toolbar-label { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; }
     .filter-btn { border: 1px solid var(--border); background: white; border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--ink-mid); cursor: pointer; transition: all 0.15s; font-family: 'Inter', sans-serif; }
     .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
-    .filter-btn.active { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+    .filter-btn.active { background: var(--blue); border-color: var(--blue); color: white; font-weight: 600; }
     .search-input { margin-left: auto; border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-family: 'Inter', sans-serif; color: var(--ink); background: white; outline: none; width: 200px; }
     .search-input:focus { border-color: var(--gold); }
-    .btn-refresh { background: var(--gold); color: var(--ink); border: none; border-radius: 6px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+    .btn-refresh { background: var(--orange); color: white; border: none; border-radius: 6px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
     .btn-refresh:hover { opacity: 0.85; }
     .btn-refresh:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .progress-bar-wrap { display: none; padding: 10px 40px; background: var(--gold-pale); border-bottom: 1px solid var(--border); align-items: center; gap: 12px; }
     .progress-bar-wrap.visible { display: flex; }
     .progress-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
-    .progress-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.3s ease; width: 0%; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--orange-light)); border-radius: 3px; transition: width 0.3s ease; width: 0%; }
     .progress-label { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
 
-    main { padding: 32px 40px; }
+    main { padding: 32px 40px; background: var(--surface-soft); }
 
     .state-box { text-align: center; padding: 60px 20px; color: var(--ink-soft); }
     .state-box p { font-size: 14px; }
@@ -59,7 +176,7 @@
     #stores-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 
     .store-card { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: box-shadow 0.15s, border-color 0.15s; position: relative; }
-    .store-card:hover { border-color: var(--gold); box-shadow: 0 4px 16px rgba(184,151,42,0.1); }
+    .store-card:hover { border-color: var(--orange); box-shadow: 0 6px 20px rgba(30,79,145,0.10); }
     .store-rank { position: absolute; top: 14px; right: 16px; font-size: 11px; color: var(--ink-soft); font-weight: 600; }
     .store-name { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--ink); line-height: 1.3; padding-right: 32px; }
     .store-address { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
@@ -84,7 +201,7 @@
     .badge-low  { background: var(--red-bg); color: var(--red); }
     .badge-na   { background: #F0EDE8; color: var(--ink-soft); }
 
-    .section-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); margin-bottom: 16px; padding-top: 40px; border-top: 1px solid var(--border); margin-top: 40px; }
+    .section-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--blue); margin-bottom: 16px; padding-top: 40px; border-top: 1px solid var(--border); margin-top: 40px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th { text-align: left; padding: 10px 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); font-weight: 500; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
     thead th:hover { color: var(--gold); }
@@ -101,6 +218,13 @@
 
     @media (max-width: 768px) {
       header, .toolbar, main { padding-left: 16px; padding-right: 16px; }
+      header { align-items: flex-start; flex-direction: column; padding-top: 18px; }
+      .header-meta { text-align: left; width: 100%; }
+      .brand-wrap { width: 100%; align-items: center; }
+      .logo-box { width: 72px; height: 72px; border-radius: 16px; }
+      .brand-name .top, .brand-name .bottom { font-size: 28px; }
+      .brand-name .bottom { margin-left: 18px; }
+      .brand-sub { font-size: 11px; letter-spacing: .08em; }
       .kpi-row { grid-template-columns: repeat(2, 1fr); }
       .kpi { padding: 16px; }
       .kpi-value { font-size: 28px; }
@@ -118,7 +242,8 @@
       white-space: nowrap;
     }
     .btn-reviews:hover {
-      background: var(--gold);
+      background: var(--blue);
+      border-color: var(--blue);
       color: white;
     }
 </style>
@@ -126,10 +251,26 @@
 <body>
 
 <header>
-  <div>
-    <div class="brand-name">Perfumes Europeos</div>
-    <div class="brand-sub">Dashboard de valoraciones · Google Places</div>
+  <div class="brand-wrap">
+    <div class="logo-box" id="logo-box">
+      <!-- Coloca tu logo en: assets/img/logo-perfumarte.png -->
+      <img
+        id="brand-logo"
+        src="logo-perfumarte.jpg"
+        alt="Logo Perfumarte"
+        style="display:block;"
+        onerror="this.style.display='none'; document.getElementById('logo-placeholder').style.display='block';"
+      >
+      <div class="logo-placeholder" id="logo-placeholder" style="display:none;">
+        Logo<br>Perfumarte
+      </div>
+    </div>
+
+    <div class="brand-copy">
+      <div class="dashboard-title">Dashboard de valoraciones • Google Places</div>
+    </div>
   </div>
+
   <div class="header-meta">
     Última actualización<br>
     <span id="last-updated">—</span>
@@ -203,159 +344,209 @@
 
 <div id="map"></div>
 
-<footer>Datos en tiempo real desde Google Places API · Proyecto Perfumes-Europeos-Reviews</footer>
+<footer>Datos en tiempo real desde Google Places API · Perfumarte</footer>
 
 <script>
+
+const LOGO_STORAGE_KEY = 'perfumarte-dashboard-logo';
+
+function showLogo(dataUrl) {
+  const img = document.getElementById('brand-logo');
+  const placeholder = document.getElementById('logo-placeholder');
+  const removeBtn = document.getElementById('btn-remove-logo');
+
+  img.src = dataUrl;
+  img.style.display = 'block';
+  placeholder.style.display = 'none';
+  removeBtn.style.display = 'inline-block';
+}
+
+function loadLogo(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    showLogo(dataUrl);
+    try {
+      localStorage.setItem(LOGO_STORAGE_KEY, dataUrl);
+    } catch (err) {
+      console.warn('No se pudo guardar el logo en el navegador:', err);
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeLogo() {
+  const img = document.getElementById('brand-logo');
+  const placeholder = document.getElementById('logo-placeholder');
+  const removeBtn = document.getElementById('btn-remove-logo');
+  const input = document.getElementById('logo-input');
+
+  img.removeAttribute('src');
+  img.style.display = 'none';
+  placeholder.style.display = 'block';
+  removeBtn.style.display = 'none';
+  input.value = '';
+  localStorage.removeItem(LOGO_STORAGE_KEY);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const savedLogo = localStorage.getItem(LOGO_STORAGE_KEY);
+  if (savedLogo) showLogo(savedLogo);
+});
+
 const API_KEY = 'AIzaSyD8N6FMrazmoy3SUYjlXmBsLJsVlS6oY0g';
 
 const STORES = [
   {
     storeCode: "01088167670648378121",
-    name: "Perfumes Europeos - Breña",
+    name: "Perfumarte - Breña",
     address: "Av. Venezuela 771, Breña 15082, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "02138719608651328127",
-    name: "Perfumes Europeos - Puno 2",
+    name: "Perfumarte - Puno 2",
     address: "Jr. Puno 451 - Stand 181, Cercado de Lima 15001, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "02943805461209440618",
-    name: "Perfumes Europeos - La Molina",
+    name: "Perfumarte - La Molina",
     address: "Centro Comercial, Av. la Molina 1167, La Molina 15024, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "04870891988438982966",
-    name: "Perfumes Europeos - Ate",
+    name: "Perfumarte - Ate",
     address: "Auxiliar Nicolas Ayllon 5290, Ate 15494, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "05016595645805932858",
-    name: "Perfumes Europeos - Jr. Ucayali",
+    name: "Perfumarte - Jr. Ucayali",
     address: "Jr. Ucayali 219, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "05111500167607162191",
-    name: "Perfumes Europeos - Jr. Puno",
+    name: "Perfumarte - Jr. Puno",
     address: "Jr. Puno 542 - Galería Puno, Lima 15001, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "06241745536898984752",
-    name: "Perfumes Europeos - San Juan de Lurigancho",
+    name: "Perfumarte - San Juan de Lurigancho",
     address: "Av. Gran Chimu 748, San Juan de Lurigancho, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "06263084366698606975",
-    name: "Perfumes Europeos - Lurín",
+    name: "Perfumarte - Lurín",
     address: "Antigua Panamericana Sur 1257, Plaza Vea Lurín, Lurín 15823, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
-    storeCode: "06771178853729467441",
-    name: "Perfumes Europeos Perú",
+    storeCode: "06771178853729467441", //valir a que tienda pertenece
+    name: "Perfumarte Perú",
     address: "Jiron Ayacucho 739, Lima 15001, Peru",
     googleStatus: "Verificada",
     note: "Marcada como cerrada por Google"
   },
   {
     storeCode: "07137088300564311214",
-    name: "Perfumes Europeos - Miraflores",
+    name: "Perfumarte - Miraflores",
     address: "Av. Jose Larco 778, Miraflores, Lima, Peru",
     googleStatus: "Verificada",
     searchQueries: [
-      "Perfumes Europeos Av. José Larco 778 Miraflores Lima Perú",
-      "Perfumes Europeos Miraflores Av Larco 778",
-      "Av. José Larco 778 Miraflores Perfumes Europeos"
+      "Perfumarte Av. José Larco 778 Miraflores Lima Perú",
+      "Perfumarte Miraflores Av Larco 778",
+      "Av. José Larco 778 Miraflores Perfumarte"
     ]
   },
   {
     storeCode: "07498721975824913318",
-    name: "Perfumes Europeos - Magdalena",
+    name: "Perfumarte - Magdalena",
     address: "Jirón José Gálvez 520, Magdalena del Mar 15086, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "07550326836361299447",
-    name: "Perfumes Europeos - Jr. de la Unión",
+    name: "Perfumarte - Jr. de la Unión 3",
     address: "Jirón de la Unión 1039, Lima 15001, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "08543799718991628569",
-    name: "Perfumes Europeos - Santa Anita",
+    name: "Perfumarte - Santa Anita",
     address: "Av. Las Alondras 165, Santa Anita 15009, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "08707589722150019156",
-    name: "Perfumes Europeos - San Juan de Miraflores",
+    name: "Perfumarte - San Juan de Miraflores",
     address: "Av. San Juan 1110, San Juan de Miraflores, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "09490436345871046646",
-    name: "Perfumes Europeos - Los Olivos",
+    name: "Perfumarte - Los Olivos",
     address: "Av. Alfredo Mendiola 3765, Los Olivos 15311, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "11651168135345126387",
-    name: "Perfumes Europeos - Lince",
+    name: "Perfumarte - Lince",
     address: "Av. Ignacio Merino 2230, Lince, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "12161127468572162589",
-    name: "Perfumes Europeos - Independencia",
+    name: "Perfumarte - Independencia",
     address: "Calle 1 115, Independencia, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "13542055745304709566",
-    name: "Perfumes Europeos - Trujillo",
+    name: "Perfumarte - Trujillo",
     address: "Jr. Gamarra 751, Trujillo 13001, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "14386088636444856687",
-    name: "Perfumes Europeos - Gamarra 2",
+    name: "Perfumarte - Gamarra 2",
     address: "Jr. Gamarra 607, La Victoria, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "14760098416601218861",
-    name: "Perfumes Europeos - Jr. de la Unión",
+    name: "Perfumarte - Jr. de la Unión 2",
     address: "Jirón de la Unión 419, Lima 15001, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "14781804421642096911",
-    name: "Perfumes Europeos - Surquillo",
+    name: "Perfumarte - Surquillo",
     address: "Av. Angamos Este 2576, Surquillo 15048, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "16122381915630851376",
-    name: "Perfumes Europeos - Jesús Maria",
+    name: "Perfumarte - Jesús Maria",
     address: "Jr. Jose Arnaldo Marquez 1391, Jesús María, Lima, Peru",
     googleStatus: "Verificada"
   },
   {
     storeCode: "17592848526533956759",
-    name: "Perfumes Europeos - Jr. Andahuaylas",
+    name: "Perfumarte - Jr. Andahuaylas",
     address: "Jr. Andahuaylas 770, Lima 15001, Peru",
     googleStatus: "Verificada"
   },
   {
-    storeCode: "18322778955693592102",
-    name: "Perfumes Europeos - Gamarra 1",
+    storeCode: "17117216770355103928",
+    name: "Perfumarte - Gamarra 1",
     address: "Jr. Gamarra 778, La Victoria 15018, Lima, Peru",
     googleStatus: "Verificada"
   }
@@ -415,7 +606,7 @@ function getSearchQueries(store) {
   return [
     `${store.name} ${store.address}`,
     `${store.address} ${store.name}`,
-    `${store.name.replace("Perfumes Europeos - ", "Perfumes Europeos ")} ${store.address}`
+    `${store.name.replace("Perfumarte - ", "Perfumarte ")} ${store.address}`
   ];
 }
 
@@ -586,7 +777,7 @@ function updateKPIs() {
   document.getElementById('kpi-avg-sub').textContent = `sobre ${withData.length} tiendas con datos`;
   document.getElementById('kpi-reviews').textContent = totalReviews.toLocaleString('es');
   document.getElementById('kpi-best').textContent = best.rating.toFixed(1) + ' ★';
-  document.getElementById('kpi-best-sub').textContent = best.name.replace('Perfumes Europeos - ','').replace('Perfumes Europeos Perú - ','');
+  document.getElementById('kpi-best-sub').textContent = best.name.replace('Perfumarte - ','').replace('Perfumarte Perú - ','');
 }
 
 function renderTable() {
