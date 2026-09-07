@@ -1,3 +1,4 @@
+L
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -246,6 +247,52 @@
       border-color: var(--blue);
       color: white;
     }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(23,32,51,0.55);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.visible { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      max-width: 560px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 28px 28px 20px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      border: none;
+      background: transparent;
+      font-size: 22px;
+      line-height: 1;
+      color: var(--ink-soft);
+      cursor: pointer;
+    }
+    .modal-close:hover { color: var(--ink); }
+    #modal-content h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--blue); padding-right: 24px; margin-bottom: 6px; }
+    .modal-meta { font-size: 13px; color: var(--ink-mid); margin-bottom: 4px; }
+    .modal-address { font-size: 12px; color: var(--ink-soft); margin-bottom: 18px; }
+    .modal-empty { font-size: 13px; color: var(--ink-soft); padding: 12px 0; }
+    .review-list { display: flex; flex-direction: column; gap: 14px; }
+    .review-item { border-top: 1px solid var(--border); padding-top: 12px; }
+    .review-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .review-author { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .review-rating { font-size: 12px; color: var(--gold); }
+    .review-time { font-size: 11px; color: var(--ink-soft); margin-bottom: 6px; }
+    .review-text { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -343,6 +390,13 @@
 </main>
 
 <div id="map"></div>
+
+<div id="review-modal" class="modal-overlay" onclick="if(event.target===this) closeReviewModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeReviewModal()">&times;</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
 
 <footer>Datos en tiempo real desde Google Places API · Perfumarte</footer>
 
@@ -828,17 +882,63 @@ function renderTable() {
   }).join('');
 }
 
+function escapeHTML(str) {
+  return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
 function openStoreDetail(idx) {
   const store = storesData.find(s => s.idx === idx);
   if (!store) return;
 
-  alert(
-    `${store.name}\n\n` +
-    `Rating actual: ${store.rating !== null ? store.rating.toFixed(1) : 'Sin datos'}\n` +
-    `Total reseñas actual: ${store.reviews !== null ? store.reviews.toLocaleString('es') : 'Sin datos'}\n\n` +
-    `Código tienda: ${store.storeCode || 'Sin código'}\n` +
-    `Dirección encontrada: ${store.foundAddress || store.address}`
+  const modal = document.getElementById('review-modal');
+  const content = document.getElementById('modal-content');
+  content.innerHTML = `<h3>${escapeHTML(store.name)}</h3><p class="modal-empty">Cargando reseñas...</p>`;
+  modal.classList.add('visible');
+
+  if (!store.placeId || !service) {
+    content.innerHTML = `<h3>${escapeHTML(store.name)}</h3><p class="modal-empty">No se encontró esta tienda en Google Places, no hay reseñas disponibles.</p>`;
+    return;
+  }
+
+  service.getDetails(
+    { placeId: store.placeId, fields: ['name', 'rating', 'user_ratings_total', 'reviews', 'formatted_address'] },
+    (place, status) => {
+      if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
+        content.innerHTML =
+          `<h3>${escapeHTML(store.name)}</h3>` +
+          `<p class="modal-empty">No se pudieron cargar las reseñas (estado: ${escapeHTML(status)}).</p>`;
+        return;
+      }
+
+      const reviews = place.reviews || [];
+      let html =
+        `<h3>${escapeHTML(place.name || store.name)}</h3>` +
+        `<div class="modal-meta">${place.rating ? place.rating.toFixed(1) : '—'} ★ · ${place.user_ratings_total ? place.user_ratings_total.toLocaleString('es') : 0} reseñas totales</div>` +
+        `<p class="modal-address">${escapeHTML(place.formatted_address || store.address)}</p>`;
+
+      if (reviews.length === 0) {
+        html += `<p class="modal-empty">Google no devolvió reseñas de texto para esta tienda en esta consulta.</p>`;
+      } else {
+        html += '<div class="review-list">' + reviews.map(r => `
+          <div class="review-item">
+            <div class="review-header">
+              <span class="review-author">${escapeHTML(r.author_name || 'Anónimo')}</span>
+              <span class="review-rating">${'★'.repeat(Math.round(r.rating || 0))}${'☆'.repeat(5 - Math.round(r.rating || 0))}</span>
+            </div>
+            <div class="review-time">${escapeHTML(r.relative_time_description || '')}</div>
+            <p class="review-text">${escapeHTML(r.text || '(Sin comentario escrito)')}</p>
+          </div>
+        `).join('') + '</div>';
+        html += '<p class="modal-empty" style="margin-top:14px">Google solo entrega hasta 5 reseñas por consulta (las más relevantes), no el listado completo.</p>';
+      }
+
+      content.innerHTML = html;
+    }
   );
+}
+
+function closeReviewModal() {
+  document.getElementById('review-modal').classList.remove('visible');
 }
 
 function setFilter(f, btn) {
@@ -850,9 +950,7 @@ function setFilter(f, btn) {
 </script>
 <script
   async
-  src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&loading=async&libraries=places&callback=initMap">
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8N6FMrazmoy3SUYjlXmBsLJsVlS6oY0g&loading=async&libraries=places&callback=initMap">
 </script>
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8N6FMrazmoy3SUYjlXmBsLJsVlS6oY0g&libraries=places&callback=initMap" async defer></script>
-!-->
 </body>
 </html>
