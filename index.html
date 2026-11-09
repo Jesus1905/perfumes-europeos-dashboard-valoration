@@ -292,6 +292,39 @@
     .review-rating { font-size: 12px; color: var(--gold); }
     .review-time { font-size: 11px; color: var(--ink-soft); margin-bottom: 6px; }
     .review-text { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+
+    /* ===== Navegación ===== */
+    .nav-tabs { display: flex; gap: 4px; padding: 0 40px; background: #fff; border-bottom: 1px solid var(--border); }
+    .nav-tab { border: none; background: transparent; padding: 14px 18px 12px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: var(--ink-mid); cursor: pointer; border-bottom: 3px solid transparent; text-decoration: none; }
+    .nav-tab:hover { color: var(--blue); }
+    .nav-tab.active { color: var(--blue); border-bottom-color: var(--orange); font-weight: 600; }
+    .page[hidden] { display: none !important; }
+
+    /* ===== Evolutivo ===== */
+    .evo-select { border: 1px solid var(--border); border-radius: 20px; padding: 6px 12px; font-size: 12px; font-family: 'Inter', sans-serif; color: var(--ink); background: #fff; outline: none; }
+    .evo-select:focus { border-color: var(--gold); }
+    .toolbar-sep { width: 1px; height: 22px; background: var(--border); margin: 0 6px; }
+    .evo-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; }
+    .evo-card h2 { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--blue); font-weight: 400; margin-bottom: 4px; }
+    .evo-card .evo-note { font-size: 12px; color: var(--ink-soft); margin-bottom: 16px; }
+    .evo-chart-wrap { position: relative; height: 300px; }
+    .kpi-delta { font-size: 12px; font-weight: 600; }
+    .kpi-delta.up { color: var(--green); }
+    .kpi-delta.down { color: var(--red); }
+    .kpi-delta.flat { color: var(--ink-soft); }
+    .bar-cell { display: flex; align-items: center; gap: 8px; min-width: 140px; }
+    .bar-cell .bar { height: 8px; border-radius: 0 4px 4px 0; background: var(--orange); min-width: 2px; }
+    .bar-cell .bar.zero { background: var(--border); }
+    .num { font-variant-numeric: tabular-nums; }
+    .evo-banner { background: var(--blue-pale); border: 1px solid #C9DAF0; color: var(--blue); border-radius: 10px; padding: 14px 18px; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
+    #evo-table tbody td:first-child { width: auto; }
+    @media (max-width: 768px) {
+      .nav-tabs { padding: 0 16px; }
+      .dashboard-title { white-space: normal; font-size: 16px; }
+      .evo-card { padding: 16px; }
+      .evo-chart-wrap { height: 240px; }
+      #evo-table-wrap { overflow-x: auto; }
+    }
 </style>
 </head>
 <body>
@@ -325,10 +358,16 @@
   </div>
 </header>
 
+<nav class="nav-tabs">
+  <a class="nav-tab active" href="#home" data-page="home">Home</a>
+  <a class="nav-tab" href="#evolutivo" data-page="evolutivo">Evolutivo</a>
+</nav>
+
+<div class="page" id="page-home">
 <div class="kpi-row">
   <div class="kpi">
     <div class="kpi-label">Tiendas</div>
-    <div class="kpi-value" id="kpi-total">25</div>
+    <div class="kpi-value" id="kpi-total">—</div>
     <div class="kpi-sub">en seguimiento</div>
   </div>
   <div class="kpi">
@@ -388,6 +427,80 @@
   </div>
 </main>
 
+</div><!-- /page-home -->
+
+<div class="page" id="page-evolutivo" hidden>
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="kpi-label">Reseñas acumuladas</div>
+      <div class="kpi-value num" id="evo-kpi-total">—</div>
+      <div class="kpi-sub" id="evo-kpi-total-sub">al último corte</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Reseñas nuevas</div>
+      <div class="kpi-value gold num" id="evo-kpi-new">—</div>
+      <div class="kpi-sub" id="evo-kpi-new-sub">en el periodo</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Rating ponderado</div>
+      <div class="kpi-value num" id="evo-kpi-rating">—</div>
+      <div class="kpi-sub" id="evo-kpi-rating-sub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Más reseñas nuevas</div>
+      <div class="kpi-value gold" id="evo-kpi-top" style="font-size:18px;padding-top:6px;">—</div>
+      <div class="kpi-sub" id="evo-kpi-top-sub">—</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="toolbar-label">Ver por</span>
+    <button class="filter-btn evo-gran active" data-gran="dia">Día</button>
+    <button class="filter-btn evo-gran" data-gran="semana">Semana</button>
+    <button class="filter-btn evo-gran" data-gran="mes">Mes</button>
+    <span class="toolbar-sep"></span>
+    <span class="toolbar-label">Periodo</span>
+    <select class="evo-select" id="evo-range">
+      <option value="7">Últimos 7 días</option>
+      <option value="30" selected>Últimos 30 días</option>
+      <option value="90">Últimos 90 días</option>
+      <option value="all">Todo el histórico</option>
+    </select>
+    <span class="toolbar-sep"></span>
+    <span class="toolbar-label">Tienda</span>
+    <select class="evo-select" id="evo-store"><option value="all">Todas las tiendas</option></select>
+  </div>
+
+  <main>
+    <div id="evo-banner" class="evo-banner" style="display:none"></div>
+
+    <div class="evo-card" id="evo-chart-card">
+      <h2 id="evo-chart-title">Reseñas nuevas por día</h2>
+      <p class="evo-note" id="evo-chart-note">Diferencia del total de reseñas entre cortes consecutivos.</p>
+      <div class="evo-chart-wrap"><canvas id="evo-chart" aria-label="Reseñas nuevas por periodo" role="img"></canvas></div>
+    </div>
+
+    <div class="evo-card">
+      <h2>Detalle por tienda</h2>
+      <p class="evo-note" id="evo-table-note">Ordenado por reseñas nuevas en el periodo.</p>
+      <div id="evo-table-wrap">
+        <table id="evo-table">
+          <thead>
+            <tr>
+              <th>Tienda</th>
+              <th>Reseñas nuevas</th>
+              <th>Reseñas totales</th>
+              <th>Rating</th>
+              <th>Cambio rating</th>
+            </tr>
+          </thead>
+          <tbody id="evo-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div><!-- /page-evolutivo -->
+
 <div id="map"></div>
 
 <div id="review-modal" class="modal-overlay" onclick="if(event.target===this) closeReviewModal()">
@@ -397,7 +510,7 @@
   </div>
 </div>
 
-<footer>Datos en tiempo real desde Google Places API · Perfumarte</footer>
+<footer id="footer-text">Datos en tiempo real desde Google Places API · Perfumarte</footer>
 
 <script>
 
@@ -452,163 +565,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const API_KEY = 'AIzaSyD8N6FMrazmoy3SUYjlXmBsLJsVlS6oY0g';
 
+// Copia de config/tiendas.json (solo tiendas activas). Si agregas una tienda allá, agrégala aquí también.
 const STORES = [
-  {
-    storeCode: "07936129293830950939",
-    name: "Perfumarte - San Miguel",
-    address: "Calle Rio Chamaya 131, San Miguel 15088, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "02138719608651328127",
-    name: "Perfumarte - Puno 2",
-    address: "Jr. Puno 451 - Stand 181, Cercado de Lima 15001, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "02943805461209440618",
-    name: "Perfumarte - La Molina",
-    address: "Centro Comercial, Av. la Molina 1167, La Molina 15024, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "04870891988438982966",
-    name: "Perfumarte - Ate",
-    address: "Auxiliar Nicolas Ayllon 5290, Ate 15494, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "05016595645805932858",
-    name: "Perfumarte - Jr. Ucayali",
-    address: "Jr. Ucayali 219, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "05111500167607162191",
-    name: "Perfumarte - Jr. Puno",
-    address: "Jr. Puno 542 - Galería Puno, Lima 15001, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "06241745536898984752",
-    name: "Perfumarte - San Juan de Lurigancho",
-    address: "Av. Gran Chimu 748, San Juan de Lurigancho, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "06263084366698606975",
-    name: "Perfumarte - Lurín",
-    address: "Antigua Panamericana Sur 1257, Plaza Vea Lurín, Lurín 15823, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "06771178853729467441", //valir a que tienda pertenece
-    name: "Perfumarte Perú",
-    address: "Jiron Ayacucho 739, Lima 15001, Peru",
-    googleStatus: "Verificada",
-    note: "Marcada como cerrada por Google"
-  },
-  {
-    storeCode: "07137088300564311214",
-    name: "Perfumarte - Miraflores",
-    address: "Av. Jose Larco 778, Miraflores, Lima, Peru",
-    googleStatus: "Verificada",
-    searchQueries: [
-      "Perfumarte Av. José Larco 778 Miraflores Lima Perú",
-      "Perfumarte Miraflores Av Larco 778",
-      "Av. José Larco 778 Miraflores Perfumarte"
-    ]
-  },
-  {
-    storeCode: "07498721975824913318",
-    name: "Perfumarte - Magdalena",
-    address: "Jirón José Gálvez 520, Magdalena del Mar 15086, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "17351409559751093440",
-    name: "Perfumarte - Megaplaza",
-    address: "Mega Plaza, Av. Alfredo Mendiola 3698, R-20, Independencia 15311, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "08543799718991628569",
-    name: "Perfumarte - Santa Anita",
-    address: "Av. Las Alondras 165, Santa Anita 15009, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "08707589722150019156",
-    name: "Perfumarte - San Juan de Miraflores",
-    address: "Av. San Juan 1110, San Juan de Miraflores, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "09490436345871046646",
-    name: "Perfumarte - Los Olivos",
-    address: "Av. Alfredo Mendiola 3765, Los Olivos 15311, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "11651168135345126387",
-    name: "Perfumarte - Lince",
-    address: "Av. Ignacio Merino 2230, Lince, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "12161127468572162589",
-    name: "Perfumarte - Independencia",
-    address: "Calle 1 115, Independencia, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "13542055745304709566",
-    name: "Perfumarte - Trujillo",
-    address: "Jr. Gamarra 751, Trujillo 13001, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "14386088636444856687",
-    name: "Perfumarte - Gamarra 2",
-    address: "Jr. Gamarra 607, La Victoria, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "14760098416601218861",
-    name: "Perfumarte - Jr. de la Unión 2",
-    address: "Jirón de la Unión 419, Lima 15001, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "14781804421642096911",
-    name: "Perfumarte - Surquillo",
-    address: "Av. Angamos Este 2576, Surquillo 15048, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "16122381915630851376",
-    name: "Perfumarte - Jesús Maria",
-    address: "Jr. Jose Arnaldo Marquez 1391, Jesús María, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "17592848526533956759",
-    name: "Perfumarte - Jr. Andahuaylas",
-    address: "Jr. Andahuaylas 770, Lima 15001, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "17117216770355103928",
-    name: "Perfumarte - Gamarra 1",
-    address: "Jr. Gamarra 778, La Victoria 15001, Lima, Peru",
-    googleStatus: "Verificada"
-  },
-  {
-    storeCode: "14429982553704362938",
-    name: "Perfumarte - Jr. de la Unión",
-    address: "Jirón de la Unión 851, Lima 15001, Peru",
-    googleStatus: "Verificada"
-  },
+  { storeCode: "07936129293830950939", name: "Perfumarte - San Miguel", address: "Calle Rio Chamaya 131, San Miguel 15088, Lima, Peru", placeId: "ChIJW5uxmz3JBZER0NaA1oKiIns" },
+  { storeCode: "02138719608651328127", name: "Perfumarte - Jr. Puno 02", address: "Jr. Puno 541 - Stand 181, Cercado de Lima 15001, Peru", placeId: "ChIJXz_VLBfJBZER1l-tyt1UiK0" },
+  { storeCode: "02943805461209440618", name: "Perfumarte - La Molina", address: "Centro Comercial, Av. la Molina 1167, La Molina 15024, Lima, Peru", placeId: "ChIJVXfJUVPHBZERxzn25u4Eyms" },
+  { storeCode: "04870891988438982966", name: "Perfumarte - Ate", address: "Auxiliar Nicolas Ayllon 5290, Ate 15494, Lima, Peru", placeId: "ChIJBUw-PhfFBZERF0NKsy8PpVA" },
+  { storeCode: "05016595645805932858", name: "Perfumarte - Jr. Ucayali", address: "Jr. Ucayali 219, Lima, Peru", placeId: "ChIJ5VRdNgDJBZEREyGjiStk23I" },
+  { storeCode: "05111500167607162191", name: "Perfumarte - Jr. Puno 01", address: "Jr. Puno 542 - Galería Puno, Lima 15001, Peru", placeId: "ChIJy9qMjNrJBZERGUj1A1uLcOc" },
+  { storeCode: "06241745536898984752", name: "Perfumarte - San Juan de Lurigancho", address: "Av. Gran Chimu 748, San Juan de Lurigancho, Lima, Peru", placeId: "ChIJT9jpV9TFBZERdX9ZEHdmsnU" },
+  { storeCode: "06263084366698606975", name: "Perfumarte - Lurín", address: "Antigua Panamericana Sur 1257, Plaza Vea Lurín, Lurín 15823, Lima, Peru", placeId: "ChIJJ3DQN2q9BZER1VxqTNQjk4c" },
+  { storeCode: "07137088300564311214", name: "Perfumarte - Miraflores", address: "Av. Jose Larco 778, Miraflores, Lima, Peru", placeId: "ChIJ5asYfNPJBZERrXQbalYYii8" },
+  { storeCode: "07498721975824913318", name: "Perfumarte - Magdalena", address: "Jirón José Gálvez 520, Magdalena del Mar 15086, Lima, Peru", placeId: "ChIJ7ThgVQDJBZER4TQBwJpT6Ac" },
+  { storeCode: "17351409559751093440", name: "Perfumarte - Megaplaza", address: "Mega Plaza, Av. Alfredo Mendiola 3698, R-20, Independencia 15311, Lima, Peru", placeId: "ChIJT5CH2gbPBZERQo0cwcc4zWg" },
+  { storeCode: "08543799718991628569", name: "Perfumarte - Santa Anita", address: "Av. Las Alondras 165, Santa Anita 15009, Lima, Peru", placeId: "ChIJKwy-vy_HBZERcHwwrEKBYNc" },
+  { storeCode: "08707589722150019156", name: "Perfumarte - San Juan de Miraflores", address: "Av. San Juan 1110, San Juan de Miraflores, Lima, Peru", placeId: "ChIJRZMq9B65BZERQOeJ11oeIMo" },
+  { storeCode: "11651168135345126387", name: "Perfumarte - Lince", address: "Av. Ignacio Merino 2230, Lince, Lima, Peru", placeId: "ChIJuUdNE4zJBZER5wLtlh1pwks" },
+  { storeCode: "12161127468572162589", name: "Perfumarte - Independencia", address: "Calle 1 115, Independencia, Lima, Peru", placeId: "ChIJ7309BwDPBZERrz5Msh4k6SE" },
+  { storeCode: "13542055745304709566", name: "Perfumarte - Trujillo", address: "Jr. Gamarra 751, Trujillo 13001, Peru", placeId: "ChIJ3dhpLVg9rZER9DmRfSZ5xOo" },
+  { storeCode: "14386088636444856687", name: "Perfumarte - Gamarra 2", address: "Jr. Gamarra 607, La Victoria, Lima, Peru", placeId: "ChIJi-zxOwDJBZERVW3qavE0iSc" },
+  { storeCode: "14760098416601218861", name: "Perfumarte - Jr. de la Unión 02", address: "Jirón de la Unión 419, Lima 15001, Peru", placeId: "ChIJY2fR_z7JBZER5wgAChGUSwA" },
+  { storeCode: "14781804421642096911", name: "Perfumarte - Surquillo", address: "Av. Angamos Este 2576, Surquillo 15048, Lima, Peru", placeId: "ChIJ94hVJHjHBZERNOabR-iLAHw" },
+  { storeCode: "16122381915630851376", name: "Perfumarte - Jesús Maria 01", address: "Jr. Jose Arnaldo Marquez 1391, Jesús María, Lima, Peru", placeId: "ChIJ69rdbwDJBZERh8Yxu6AGfLg" },
+  { storeCode: "17592848526533956759", name: "Perfumarte - Jr. Andahuaylas", address: "Jr. Andahuaylas 770, Lima 15001, Peru", placeId: "ChIJ_fuU8pTJBZER9INo16LQffc" },
+  { storeCode: "17117216770355103928", name: "Perfumarte - Gamarra 1", address: "Jr. Gamarra 778, La Victoria 15001, Lima, Peru", placeId: "ChIJYQCh1LHPBZERyBkI5Fpi9VU" },
+  { storeCode: "14429982553704362938", name: "Perfumarte - Jr. de la Unión", address: "Jirón de la Unión 851, Lima 15001, Peru", placeId: "ChIJ_zEFex3JBZERlC_MrhF1GWQ" },
+  { storeCode: "01088167670648378121", name: "Perfumarte - Jesús Maria 02", address: "Av. República Dominicana 250, Jesús María 15072, Lima, Peru", placeId: "ChIJezqqOk_JBZERMuBCdMN32WU" },
 ];
 
 let storesData = [];
@@ -643,7 +625,7 @@ function startLoad() {
       storeCode: s.storeCode || `store-${idx}`,
       rating: null,
       reviews: null,
-      placeId: null,
+      placeId: s.placeId || null,
       foundName: null,
       foundAddress: null,
       status: null
@@ -653,7 +635,7 @@ function startLoad() {
   updateProgress(0);
 
   STORES.forEach((store, idx) => {
-    setTimeout(() => searchStore(store, idx), idx * 300);
+    setTimeout(() => (store.placeId ? loadByPlaceId(store, idx) : searchStore(store, idx)), idx * 150);
   });
 }
 
@@ -667,6 +649,27 @@ function getSearchQueries(store) {
     `${store.address} ${store.name}`,
     `${store.name.replace("Perfumarte - ", "Perfumarte ")} ${store.address}`
   ];
+}
+
+function loadByPlaceId(store, idx) {
+  service.getDetails(
+    { placeId: store.placeId, fields: ['place_id', 'name', 'rating', 'user_ratings_total', 'formatted_address', 'business_status'] },
+    (p, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && p) {
+        storesData[idx].rating       = p.rating ?? null;
+        storesData[idx].reviews      = p.user_ratings_total ?? null;
+        storesData[idx].placeId      = p.place_id ?? store.placeId;
+        storesData[idx].foundName    = p.name ?? store.name;
+        storesData[idx].foundAddress = p.formatted_address ?? store.address;
+        storesData[idx].status       = p.business_status ?? null;
+        storesData[idx].apiStatus    = status;
+      } else {
+        console.warn(`No cargó ${store.name} por place_id. Estado:`, status);
+        storesData[idx].apiStatus = status;
+      }
+      finishStoreLoad();
+    }
+  );
 }
 
 function searchStore(store, idx, attempt = 0) {
@@ -942,11 +945,252 @@ function closeReviewModal() {
 
 function setFilter(f, btn) {
   currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#page-home .filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderCards();
 }
+
+/* =====================================================================
+   NAVEGACIÓN (Home por defecto) + EVOLUTIVO
+   ===================================================================== */
+const HISTORICO_URL = 'https://raw.githubusercontent.com/Jesus1905/perfumes-europeos-dashboard-valoration/data/historico.json';
+
+let evo = { rows: null, gran: 'dia', range: '30', store: 'all', chart: null, loading: false };
+
+function showPage(page) {
+  if (page !== 'evolutivo') page = 'home';
+  document.getElementById('page-home').hidden = page !== 'home';
+  document.getElementById('page-evolutivo').hidden = page !== 'evolutivo';
+  document.querySelectorAll('.nav-tab').forEach(a => a.classList.toggle('active', a.dataset.page === page));
+  document.querySelector('.header-meta').style.visibility = page === 'home' ? 'visible' : 'hidden';
+  document.getElementById('footer-text').textContent = page === 'home'
+    ? 'Datos en tiempo real desde Google Places API · Perfumarte'
+    : 'Histórico capturado cada día a las 6:00 a.m. (hora de Lima) · Perfumarte';
+  if (page === 'evolutivo') loadEvolutivo();
+}
+
+window.addEventListener('hashchange', () => showPage(location.hash.slice(1)));
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('kpi-total').textContent = STORES.length;
+  document.querySelectorAll('.evo-gran').forEach(b => b.addEventListener('click', () => {
+    evo.gran = b.dataset.gran;
+    document.querySelectorAll('.evo-gran').forEach(x => x.classList.toggle('active', x === b));
+    renderEvolutivo();
+  }));
+  document.getElementById('evo-range').addEventListener('change', e => { evo.range = e.target.value; renderEvolutivo(); });
+  document.getElementById('evo-store').addEventListener('change', e => { evo.store = e.target.value; renderEvolutivo(); });
+  showPage(location.hash.slice(1));
+});
+
+const diaAnterior = f => new Date(Date.parse(f + 'T12:00:00Z') - 864e5).toISOString().slice(0, 10);
+const addDays = (f, n) => new Date(Date.parse(f + 'T12:00:00Z') + n * 864e5).toISOString().slice(0, 10);
+const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const fmtDia = f => `${Number(f.slice(8))} ${MESES[Number(f.slice(5, 7)) - 1]}`;
+const corto = n => n.replace('Perfumarte - ', '').replace('Perfumarte ', '');
+
+function inicioSemana(f) {
+  const d = new Date(Date.parse(f + 'T12:00:00Z'));
+  const dow = (d.getUTCDay() + 6) % 7; // lunes = 0
+  return addDays(f, -dow);
+}
+function bucketDe(f, gran) {
+  if (gran === 'semana') return inicioSemana(f);
+  if (gran === 'mes') return f.slice(0, 7);
+  return f;
+}
+function etiquetaBucket(b, gran) {
+  if (gran === 'semana') return 'Sem. ' + fmtDia(b);
+  if (gran === 'mes') return MESES[Number(b.slice(5, 7)) - 1] + ' ' + b.slice(0, 4);
+  return fmtDia(b);
+}
+
+async function loadEvolutivo() {
+  if (evo.rows || evo.loading) { if (evo.rows) renderEvolutivo(); return; }
+  evo.loading = true;
+  document.getElementById('evo-banner').style.display = 'block';
+  document.getElementById('evo-banner').textContent = 'Cargando histórico...';
+  try {
+    const r = await fetch(HISTORICO_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    evo.rows = data.map(x => ({ ...x, fecha_corte: x.fecha_corte || diaAnterior(x.fecha), resenas: Number(x.resenas) || 0, rating: x.rating == null ? null : Number(x.rating) }));
+    const sel = document.getElementById('evo-store');
+    const nombres = new Map();
+    evo.rows.forEach(x => nombres.set(x.codigo, x.tienda));
+    STORES.forEach(s => nombres.set(s.storeCode, s.name));
+    [...nombres.entries()].filter(([c]) => evo.rows.some(x => x.codigo === c))
+      .sort((a, b) => corto(a[1]).localeCompare(corto(b[1]), 'es'))
+      .forEach(([c, n]) => sel.insertAdjacentHTML('beforeend', `<option value="${escapeHTML(c)}">${escapeHTML(corto(n))}</option>`));
+    renderEvolutivo();
+  } catch (e) {
+    console.error(e);
+    document.getElementById('evo-banner').textContent = 'No se pudo leer el histórico (' + e.message + '). Revisa que la rama data exista en GitHub.';
+  } finally {
+    evo.loading = false;
+  }
+}
+
+function renderEvolutivo() {
+  if (!evo.rows) return;
+  const nombreDe = new Map();
+  evo.rows.forEach(x => nombreDe.set(x.codigo, x.tienda));
+  STORES.forEach(s => nombreDe.set(s.storeCode, s.name));
+
+  // Serie por tienda: fecha_corte -> fila (si hay dos el mismo día, gana la última captura)
+  const porTienda = new Map();
+  [...evo.rows].sort((a, b) => (a.capturado || a.fecha).localeCompare(b.capturado || b.fecha)).forEach(x => {
+    if (!porTienda.has(x.codigo)) porTienda.set(x.codigo, new Map());
+    porTienda.get(x.codigo).set(x.fecha_corte, x);
+  });
+  const fechas = [...new Set(evo.rows.map(x => x.fecha_corte))].sort();
+  const ultima = fechas[fechas.length - 1];
+  let desde = evo.range === 'all' ? fechas[0] : addDays(ultima, -(Number(evo.range) - 1));
+  // En vista semanal o mensual, el periodo empieza al inicio de la semana / mes para no mostrar barras cortadas
+  if (evo.gran === 'semana') desde = inicioSemana(desde);
+  if (evo.gran === 'mes') desde = desde.slice(0, 8) + '01';
+  const codigos = evo.store === 'all' ? [...porTienda.keys()] : [evo.store];
+
+  // Reseñas nuevas por tienda y fecha = diferencia con su corte anterior disponible
+  const nuevasPorFecha = new Map();
+  const resumen = [];
+  for (const c of codigos) {
+    const serie = porTienda.get(c);
+    if (!serie) continue;
+    const fs = [...serie.keys()].sort();
+    let nuevas = 0, base = null;
+    for (let i = 0; i < fs.length; i++) {
+      const f = fs[i], fila = serie.get(f);
+      if (f < desde) { base = fila; continue; }
+      if (base === null && i > 0) base = serie.get(fs[i - 1]);
+      if (i > 0) {
+        const d = fila.resenas - serie.get(fs[i - 1]).resenas;
+        nuevas += d;
+        nuevasPorFecha.set(f, (nuevasPorFecha.get(f) || 0) + d);
+      }
+    }
+    const fin = serie.get(fs[fs.length - 1]);
+    const ini = base || serie.get(fs.find(f => f >= desde) || fs[0]);
+    resumen.push({
+      codigo: c, nombre: nombreDe.get(c) || c, nuevas,
+      total: fin.resenas, rating: fin.rating,
+      dRating: (fin.rating != null && ini.rating != null) ? +(fin.rating - ini.rating).toFixed(1) : null,
+      vigente: fin.fecha_corte === ultima
+    });
+  }
+
+  const conPeriodo = fechas.filter(f => f >= desde);
+  const hayEvolucion = fechas.length >= 2;
+
+  // Banner de estado
+  const banner = document.getElementById('evo-banner');
+  if (!hayEvolucion) {
+    banner.style.display = 'block';
+    banner.innerHTML = `Por ahora solo hay una captura (corte <strong>${fmtDia(ultima)}</strong>). Las reseñas nuevas aparecerán desde la segunda captura diaria; mientras tanto se muestran los totales actuales.`;
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // KPIs
+  const vig = resumen.filter(r => r.vigente);
+  const total = vig.reduce((a, r) => a + r.total, 0);
+  const nuevasTot = resumen.reduce((a, r) => a + r.nuevas, 0);
+  const pond = vig.filter(r => r.rating != null);
+  const peso = pond.reduce((a, r) => a + r.total, 0);
+  const ratingPond = peso ? pond.reduce((a, r) => a + r.rating * r.total, 0) / peso : null;
+  document.getElementById('evo-kpi-total').textContent = total.toLocaleString('es');
+  document.getElementById('evo-kpi-total-sub').textContent = `al corte del ${fmtDia(ultima)}`;
+  document.getElementById('evo-kpi-new').textContent = hayEvolucion ? (nuevasTot > 0 ? '+' : '') + nuevasTot.toLocaleString('es') : '—';
+  document.getElementById('evo-kpi-new-sub').textContent = hayEvolucion
+    ? `del ${fmtDia(conPeriodo[0] || desde)} al ${fmtDia(ultima)}` : 'disponible desde la 2.ª captura';
+  document.getElementById('evo-kpi-rating').textContent = ratingPond ? ratingPond.toFixed(2) : '—';
+  document.getElementById('evo-kpi-rating-sub').textContent = `ponderado por reseñas · ${pond.length} tienda${pond.length === 1 ? '' : 's'}`;
+  const top = [...resumen].sort((a, b) => b.nuevas - a.nuevas)[0];
+  if (hayEvolucion && top && top.nuevas > 0) {
+    document.getElementById('evo-kpi-top').textContent = corto(top.nombre);
+    document.getElementById('evo-kpi-top-sub').textContent = `+${top.nuevas} reseñas en el periodo`;
+  } else {
+    document.getElementById('evo-kpi-top').textContent = '—';
+    document.getElementById('evo-kpi-top-sub').textContent = hayEvolucion ? 'sin reseñas nuevas en el periodo' : 'disponible desde la 2.ª captura';
+  }
+
+  // Gráfico: reseñas nuevas agrupadas por día / semana / mes
+  const buckets = new Map();
+  const fechasDelta = fechas.filter((f, i) => i > 0 && f >= desde);
+  fechasDelta.forEach(f => {
+    const b = bucketDe(f, evo.gran);
+    buckets.set(b, (buckets.get(b) || 0) + (nuevasPorFecha.get(f) || 0));
+  });
+  const claves = [...buckets.keys()].sort();
+  const titulo = { dia: 'por día', semana: 'por semana', mes: 'por mes' }[evo.gran];
+  const quien = evo.store === 'all' ? 'todas las tiendas' : corto(nombreDe.get(evo.store) || '');
+  document.getElementById('evo-chart-title').textContent = `Reseñas nuevas ${titulo} · ${quien}`;
+  document.getElementById('evo-chart-note').textContent = evo.gran === 'semana'
+    ? 'Semanas de lunes a domingo. Cada corte es el total al cierre del día; la diferencia entre cortes son las reseñas nuevas.'
+    : 'Cada corte es el total al cierre del día; la diferencia entre cortes son las reseñas nuevas.';
+  const enCurso = b => (evo.gran === 'semana' && addDays(b, 6) > ultima) || (evo.gran === 'mes' && addDays(ultima, 1).slice(0, 7) === b);
+  document.getElementById('evo-chart-card').style.display = hayEvolucion ? '' : 'none';
+  drawEvoChart(claves.map(b => etiquetaBucket(b, evo.gran) + (enCurso(b) ? ' (en curso)' : '')), claves.map(b => buckets.get(b)));
+
+  // Tabla
+  const maxN = Math.max(1, ...resumen.map(r => r.nuevas));
+  const filas = [...resumen].sort((a, b) => b.nuevas - a.nuevas || b.total - a.total);
+  document.getElementById('evo-table-note').textContent = hayEvolucion
+    ? `Ordenado por reseñas nuevas del ${fmtDia(conPeriodo[0] || desde)} al ${fmtDia(ultima)}.`
+    : 'Totales al primer corte. El cambio aparecerá desde la segunda captura.';
+  document.getElementById('evo-body').innerHTML = filas.map(r => {
+    const w = Math.round((Math.max(r.nuevas, 0) / maxN) * 100);
+    const dr = r.dRating;
+    const drTxt = !hayEvolucion || dr === null ? '—' : dr === 0 ? '0.0' : (dr > 0 ? '▲ +' : '▼ ') + dr.toFixed(1);
+    const drCls = !hayEvolucion || !dr ? 'flat' : dr > 0 ? 'up' : 'down';
+    const rc = ratingClass(r.rating);
+    return `<tr>
+      <td class="td-name">${escapeHTML(corto(r.nombre))}${r.vigente ? '' : ' <span style="font-size:11px;color:var(--ink-soft)">(sin captura reciente)</span>'}</td>
+      <td><div class="bar-cell">${hayEvolucion ? `<div class="bar ${r.nuevas > 0 ? '' : 'zero'}" style="width:${w}%"></div>` : ''}<span class="num">${hayEvolucion ? (r.nuevas > 0 ? '+' : '') + r.nuevas : '—'}</span></div></td>
+      <td class="num">${r.total.toLocaleString('es')}</td>
+      <td><span class="rating-number ${rc}" style="font-size:16px">${r.rating != null ? r.rating.toFixed(1) : '—'}</span></td>
+      <td><span class="kpi-delta ${drCls}">${drTxt}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function drawEvoChart(labels, values) {
+  const ctx = document.getElementById('evo-chart');
+  if (typeof Chart === 'undefined') { document.getElementById('evo-chart-note').textContent = 'No se pudo cargar la librería de gráficos; revisa tu conexión y recarga la página.'; return; }
+  if (evo.chart) evo.chart.destroy();
+  const vacio = labels.length === 0;
+  evo.chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: vacio ? ['Sin datos aún'] : labels,
+      datasets: [{
+        label: 'Reseñas nuevas',
+        data: vacio ? [0] : values,
+        backgroundColor: '#F36C21',
+        hoverBackgroundColor: '#D95612',
+        borderRadius: { topLeft: 4, topRight: 4 },
+        borderSkipped: 'bottom',
+        maxBarThickness: 36
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 250 },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#172033', padding: 10, displayColors: false,
+          callbacks: { label: c => `${c.parsed.y > 0 ? '+' : ''}${c.parsed.y} reseñas nuevas` }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#4C566A', font: { family: 'Inter', size: 11 }, maxRotation: 0, autoSkip: true } },
+        y: { beginAtZero: true, grid: { color: '#E3E8F0' }, border: { display: false },
+             ticks: { color: '#8992A3', font: { family: 'Inter', size: 11 }, precision: 0 } }
+      }
+    }
+  });
+}
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script
   async
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8N6FMrazmoy3SUYjlXmBsLJsVlS6oY0g&loading=async&libraries=places&callback=initMap">
