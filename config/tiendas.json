@@ -201,8 +201,7 @@
     "storeCode": "01088167670648378121",
     "name": "Perfumarte - Jesús Maria 02",
     "address": "Av. República Dominicana 250, Jesús María 15072, Lima, Peru",
-    "placeId": null,
-    "activa": false,
-    "nota": "Pendiente place_id (cid 7339028749129801778)"
+    "placeId": "ChIJezqqOk_JBZERMuBCdMN32WU",
+    "activa": true
   }
 ]
