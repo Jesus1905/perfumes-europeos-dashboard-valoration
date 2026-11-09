@@ -99,6 +99,11 @@ async function main() {
   for (const t of ordenadas) {
     try {
       let pid = t.placeId || cache[t.storeCode]?.placeId;
+      // Un place_id guardado automáticamente que choca con otra tienda se descarta y se busca de nuevo.
+      if (pid && !t.placeId && usados.has(pid)) {
+        delete cache[t.storeCode];
+        pid = null;
+      }
       if (pid && usados.has(pid)) {
         errores.push(`${t.name}: comparte place_id con ${usados.get(pid)}. Fija el placeId correcto en config/tiendas.json`);
         continue;

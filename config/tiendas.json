@@ -10,7 +10,7 @@
     "storeCode": "02138719608651328127",
     "name": "Perfumarte - Jr. Puno 02",
     "address": "Jr. Puno 541 - Stand 181, Cercado de Lima 15001, Peru",
-    "placeId": null,
+    "placeId": "ChIJXz_VLBfJBZER1l-tyt1UiK0",
     "activa": true,
     "searchQueries": [
       "Perfumarte - Jr. Puno 02 Jr. Puno 541 - Stand 181, Cercado de Lima 15001, Peru",
@@ -43,13 +43,14 @@
     "storeCode": "05111500167607162191",
     "name": "Perfumarte - Jr. Puno 01",
     "address": "Jr. Puno 542 - Galería Puno, Lima 15001, Peru",
-    "placeId": null,
+    "placeId": "ChIJy9qMjNrJBZERGUj1A1uLcOc",
     "activa": true,
     "searchQueries": [
       "Perfumarte - Jr. Puno 01 Jr. Puno 542 - Galería Puno, Lima 15001, Peru",
       "Perfumarte - Jr. Puno 01",
       "Perfumarte Jr. Puno 542 - Galería Puno Lima"
-    ]
+    ],
+    "nota": "En Google Maps aún figura como Perfumes Europeos (09/11/2026)"
   },
   {
     "storeCode": "06241745536898984752",
@@ -152,13 +153,14 @@
     "storeCode": "14760098416601218861",
     "name": "Perfumarte - Jr. de la Unión 02",
     "address": "Jirón de la Unión 419, Lima 15001, Peru",
-    "placeId": null,
+    "placeId": "ChIJY2fR_z7JBZER5wgAChGUSwA",
     "activa": true,
     "searchQueries": [
       "Perfumarte - Jr. de la Unión 02 Jirón de la Unión 419, Lima 15001, Peru",
       "Perfumarte - Jr. de la Unión 02",
       "Perfumarte Jirón de la Unión 419 Lima"
-    ]
+    ],
+    "nota": "En Google Maps aún figura como Perfumes Europeos (09/11/2026)"
   },
   {
     "storeCode": "14781804421642096911",
@@ -169,7 +171,7 @@
   },
   {
     "storeCode": "16122381915630851376",
-    "name": "Perfumarte - Jesús Maria",
+    "name": "Perfumarte - Jesús Maria 01",
     "address": "Jr. Jose Arnaldo Marquez 1391, Jesús María, Lima, Peru",
     "placeId": "ChIJ69rdbwDJBZERh8Yxu6AGfLg",
     "activa": true
@@ -194,5 +196,13 @@
     "address": "Jirón de la Unión 851, Lima 15001, Peru",
     "placeId": "ChIJ_zEFex3JBZERlC_MrhF1GWQ",
     "activa": true
+  },
+  {
+    "storeCode": "01088167670648378121",
+    "name": "Perfumarte - Jesús Maria 02",
+    "address": "Av. República Dominicana 250, Jesús María 15072, Lima, Peru",
+    "placeId": null,
+    "activa": false,
+    "nota": "Pendiente place_id (cid 7339028749129801778)"
   }
 ]
