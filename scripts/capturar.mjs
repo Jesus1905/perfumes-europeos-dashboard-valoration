@@ -89,14 +89,27 @@ async function main() {
 
   const filas = [];
   const errores = [];
+  const usados = new Map(); // place_id -> tienda que ya lo usa
 
-  for (const t of tiendas) {
-    if (t.activa === false) continue;
+  // Primero las tiendas con placeId fijado a mano, luego las ya resueltas y al final las nuevas,
+  // para que una búsqueda nueva nunca le "robe" el place_id a una tienda confirmada.
+  const prioridad = t => t.placeId ? 0 : (cache[t.storeCode]?.placeId ? 1 : 2);
+  const ordenadas = tiendas.filter(t => t.activa !== false).sort((a, b) => prioridad(a) - prioridad(b));
+
+  for (const t of ordenadas) {
     try {
       let pid = t.placeId || cache[t.storeCode]?.placeId;
+      if (pid && usados.has(pid)) {
+        errores.push(`${t.name}: comparte place_id con ${usados.get(pid)}. Fija el placeId correcto en config/tiendas.json`);
+        continue;
+      }
       if (!pid) {
         const p = await buscarPlaceId(t);
         if (!p) { errores.push(`${t.name}: no se encontró en Google`); continue; }
+        if (usados.has(p.id)) {
+          errores.push(`${t.name}: Google devolvió el local de ${usados.get(p.id)}. Fija el placeId correcto en config/tiendas.json`);
+          continue;
+        }
         pid = p.id;
         cache[t.storeCode] = {
           placeId: pid,
@@ -106,6 +119,7 @@ async function main() {
         };
         console.log(`NUEVO place_id ${t.name} -> ${pid} (${p.displayName?.text ?? ''})`);
       }
+      usados.set(pid, t.name);
       const d = await detalle(pid);
       filas.push({
         fecha: HOY,
@@ -131,10 +145,9 @@ async function main() {
     process.exit(1);
   }
 
-  // Si se corre dos veces el mismo día, se reemplaza la foto de ese día.
-  const claves = new Set(filas.map(f => `${f.fecha}|${f.codigo}`));
+  // Si se corre dos veces el mismo día, la foto de ese día se reemplaza completa.
   const final = historico
-    .filter(f => !claves.has(`${f.fecha}|${f.codigo}`))
+    .filter(f => f.fecha !== HOY)
     .concat(filas)
     .sort((a, b) => a.fecha.localeCompare(b.fecha) || a.tienda.localeCompare(b.tienda));
 

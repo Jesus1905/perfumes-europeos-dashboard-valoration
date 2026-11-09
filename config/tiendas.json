@@ -3,7 +3,7 @@
     "storeCode": "07936129293830950939",
     "name": "Perfumarte - San Miguel",
     "address": "Calle Rio Chamaya 131, San Miguel 15088, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJW5uxmz3JBZER0NaA1oKiIns",
     "activa": true
   },
   {
@@ -17,21 +17,21 @@
     "storeCode": "02943805461209440618",
     "name": "Perfumarte - La Molina",
     "address": "Centro Comercial, Av. la Molina 1167, La Molina 15024, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJVXfJUVPHBZERxzn25u4Eyms",
     "activa": true
   },
   {
     "storeCode": "04870891988438982966",
     "name": "Perfumarte - Ate",
     "address": "Auxiliar Nicolas Ayllon 5290, Ate 15494, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJBUw-PhfFBZERF0NKsy8PpVA",
     "activa": true
   },
   {
     "storeCode": "05016595645805932858",
     "name": "Perfumarte - Jr. Ucayali",
     "address": "Jr. Ucayali 219, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJ5VRdNgDJBZEREyGjiStk23I",
     "activa": true
   },
   {
@@ -45,14 +45,14 @@
     "storeCode": "06241745536898984752",
     "name": "Perfumarte - San Juan de Lurigancho",
     "address": "Av. Gran Chimu 748, San Juan de Lurigancho, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJT9jpV9TFBZERdX9ZEHdmsnU",
     "activa": true
   },
   {
     "storeCode": "06263084366698606975",
     "name": "Perfumarte - Lurín",
     "address": "Antigua Panamericana Sur 1257, Plaza Vea Lurín, Lurín 15823, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJJ3DQN2q9BZER1VxqTNQjk4c",
     "activa": true
   },
   {
@@ -67,7 +67,7 @@
     "storeCode": "07137088300564311214",
     "name": "Perfumarte - Miraflores",
     "address": "Av. Jose Larco 778, Miraflores, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJ5asYfNPJBZERrXQbalYYii8",
     "activa": true,
     "searchQueries": [
       "Perfumarte Av. José Larco 778 Miraflores Lima Perú",
@@ -79,28 +79,28 @@
     "storeCode": "07498721975824913318",
     "name": "Perfumarte - Magdalena",
     "address": "Jirón José Gálvez 520, Magdalena del Mar 15086, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJ7ThgVQDJBZER4TQBwJpT6Ac",
     "activa": true
   },
   {
     "storeCode": "17351409559751093440",
     "name": "Perfumarte - Megaplaza",
     "address": "Mega Plaza, Av. Alfredo Mendiola 3698, R-20, Independencia 15311, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJT5CH2gbPBZERQo0cwcc4zWg",
     "activa": true
   },
   {
     "storeCode": "08543799718991628569",
     "name": "Perfumarte - Santa Anita",
     "address": "Av. Las Alondras 165, Santa Anita 15009, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJKwy-vy_HBZERcHwwrEKBYNc",
     "activa": true
   },
   {
     "storeCode": "08707589722150019156",
     "name": "Perfumarte - San Juan de Miraflores",
     "address": "Av. San Juan 1110, San Juan de Miraflores, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJRZMq9B65BZERQOeJ11oeIMo",
     "activa": true
   },
   {
@@ -114,28 +114,28 @@
     "storeCode": "11651168135345126387",
     "name": "Perfumarte - Lince",
     "address": "Av. Ignacio Merino 2230, Lince, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJuUdNE4zJBZER5wLtlh1pwks",
     "activa": true
   },
   {
     "storeCode": "12161127468572162589",
     "name": "Perfumarte - Independencia",
     "address": "Calle 1 115, Independencia, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJ7309BwDPBZERrz5Msh4k6SE",
     "activa": true
   },
   {
     "storeCode": "13542055745304709566",
     "name": "Perfumarte - Trujillo",
     "address": "Jr. Gamarra 751, Trujillo 13001, Peru",
-    "placeId": null,
+    "placeId": "ChIJ3dhpLVg9rZER9DmRfSZ5xOo",
     "activa": true
   },
   {
     "storeCode": "14386088636444856687",
     "name": "Perfumarte - Gamarra 2",
     "address": "Jr. Gamarra 607, La Victoria, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJi-zxOwDJBZERVW3qavE0iSc",
     "activa": true
   },
   {
@@ -149,35 +149,35 @@
     "storeCode": "14781804421642096911",
     "name": "Perfumarte - Surquillo",
     "address": "Av. Angamos Este 2576, Surquillo 15048, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJ94hVJHjHBZERNOabR-iLAHw",
     "activa": true
   },
   {
     "storeCode": "16122381915630851376",
     "name": "Perfumarte - Jesús Maria",
     "address": "Jr. Jose Arnaldo Marquez 1391, Jesús María, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJ69rdbwDJBZERh8Yxu6AGfLg",
     "activa": true
   },
   {
     "storeCode": "17592848526533956759",
     "name": "Perfumarte - Jr. Andahuaylas",
     "address": "Jr. Andahuaylas 770, Lima 15001, Peru",
-    "placeId": null,
+    "placeId": "ChIJ_fuU8pTJBZER9INo16LQffc",
     "activa": true
   },
   {
     "storeCode": "17117216770355103928",
     "name": "Perfumarte - Gamarra 1",
     "address": "Jr. Gamarra 778, La Victoria 15001, Lima, Peru",
-    "placeId": null,
+    "placeId": "ChIJYQCh1LHPBZERyBkI5Fpi9VU",
     "activa": true
   },
   {
     "storeCode": "14429982553704362938",
     "name": "Perfumarte - Jr. de la Unión",
     "address": "Jirón de la Unión 851, Lima 15001, Peru",
-    "placeId": null,
+    "placeId": "ChIJ_zEFex3JBZERlC_MrhF1GWQ",
     "activa": true
   }
 ]
