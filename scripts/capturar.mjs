@@ -21,6 +21,10 @@ const HOY = new Intl.DateTimeFormat('en-CA', {
 }).format(new Date());
 const AHORA = new Date().toISOString();
 
+// Día al que corresponde el total: la captura de las 6:00 a.m. refleja el cierre del día anterior.
+const diaAnterior = f => new Date(Date.parse(f + 'T12:00:00Z') - 864e5).toISOString().slice(0, 10);
+const FECHA_CORTE = diaAnterior(HOY);
+
 const esperar = ms => new Promise(r => setTimeout(r, ms));
 
 async function leerJSON(file, porDefecto) {
@@ -128,6 +132,7 @@ async function main() {
       const d = await detalle(pid);
       filas.push({
         fecha: HOY,
+        fecha_corte: FECHA_CORTE,
         codigo: t.storeCode,
         tienda: t.name,
         place_id: pid,
@@ -153,6 +158,7 @@ async function main() {
   // Si se corre dos veces el mismo día, la foto de ese día se reemplaza completa.
   const final = historico
     .filter(f => f.fecha !== HOY)
+    .map(f => f.fecha_corte ? f : { fecha: f.fecha, fecha_corte: diaAnterior(f.fecha), ...f })
     .concat(filas)
     .sort((a, b) => a.fecha.localeCompare(b.fecha) || a.tienda.localeCompare(b.tienda));
 
@@ -160,7 +166,7 @@ async function main() {
   await writeFile(histFile, '[\n' + final.map(f => '  ' + JSON.stringify(f)).join(',\n') + '\n]\n');
 
   // CSV para Excel / Power BI
-  const cols = ['fecha', 'codigo', 'tienda', 'place_id', 'rating', 'resenas', 'estado'];
+  const cols = ['fecha', 'fecha_corte', 'codigo', 'tienda', 'place_id', 'rating', 'resenas', 'estado'];
   const csv = [cols.join(',')]
     .concat(final.map(f => cols.map(c => csvCampo(f[c])).join(',')))
     .join('\n') + '\n';
@@ -168,7 +174,7 @@ async function main() {
 
   await writeFile(cacheFile, JSON.stringify(cache, null, 2) + '\n');
   await writeFile(estadoFile, JSON.stringify({
-    fecha: HOY, capturado: AHORA, tiendasOk: filas.length, errores
+    fecha: HOY, fecha_corte: FECHA_CORTE, capturado: AHORA, tiendasOk: filas.length, errores
   }, null, 2) + '\n');
 
   console.log(`Listo: ${filas.length} tiendas guardadas para ${HOY}; ${errores.length} con error.`);
