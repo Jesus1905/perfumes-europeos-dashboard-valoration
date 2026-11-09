@@ -1,10 +1,6 @@
 {
   "fecha": "2026-11-09",
-  "capturado": "2026-11-09T16:16:12.608Z",
-  "tiendasOk": 20,
-  "errores": [
-    "Perfumarte - Jr. Puno 02: comparte place_id con Perfumarte - Jr. de la Unión. Fija el placeId correcto en config/tiendas.json",
-    "Perfumarte - Jr. Puno 01: comparte place_id con Perfumarte - Jr. de la Unión. Fija el placeId correcto en config/tiendas.json",
-    "Perfumarte - Jr. de la Unión 02: comparte place_id con Perfumarte - Jr. de la Unión. Fija el placeId correcto en config/tiendas.json"
-  ]
+  "capturado": "2026-11-09T17:02:53.663Z",
+  "tiendasOk": 24,
+  "errores": []
 }
