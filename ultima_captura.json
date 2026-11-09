@@ -1,6 +1,12 @@
 {
   "fecha": "2026-11-09",
-  "capturado": "2026-11-09T16:04:38.097Z",
-  "tiendasOk": 25,
-  "errores": []
+  "capturado": "2026-11-09T16:07:43.054Z",
+  "tiendasOk": 20,
+  "errores": [
+    "Perfumarte - Puno 2: comparte place_id con Perfumarte - Jr. de la Unión. Fija el placeId correcto en config/tiendas.json",
+    "Perfumarte - Jr. Puno: comparte place_id con Perfumarte - Jr. de la Unión. Fija el placeId correcto en config/tiendas.json",
+    "Perfumarte Perú: comparte place_id con Perfumarte - Jr. de la Unión. Fija el placeId correcto en config/tiendas.json",
+    "Perfumarte - Los Olivos: comparte place_id con Perfumarte - Megaplaza. Fija el placeId correcto en config/tiendas.json",
+    "Perfumarte - Jr. de la Unión 2: comparte place_id con Perfumarte - Jr. de la Unión. Fija el placeId correcto en config/tiendas.json"
+  ]
 }
