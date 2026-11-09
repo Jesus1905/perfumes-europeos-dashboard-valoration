@@ -8,10 +8,15 @@
   },
   {
     "storeCode": "02138719608651328127",
-    "name": "Perfumarte - Puno 2",
-    "address": "Jr. Puno 451 - Stand 181, Cercado de Lima 15001, Peru",
+    "name": "Perfumarte - Jr. Puno 02",
+    "address": "Jr. Puno 541 - Stand 181, Cercado de Lima 15001, Peru",
     "placeId": null,
-    "activa": true
+    "activa": true,
+    "searchQueries": [
+      "Perfumarte - Jr. Puno 02 Jr. Puno 541 - Stand 181, Cercado de Lima 15001, Peru",
+      "Perfumarte - Jr. Puno 02",
+      "Perfumarte Jr. Puno 541 - Stand 181 Lima"
+    ]
   },
   {
     "storeCode": "02943805461209440618",
@@ -36,10 +41,15 @@
   },
   {
     "storeCode": "05111500167607162191",
-    "name": "Perfumarte - Jr. Puno",
+    "name": "Perfumarte - Jr. Puno 01",
     "address": "Jr. Puno 542 - Galería Puno, Lima 15001, Peru",
     "placeId": null,
-    "activa": true
+    "activa": true,
+    "searchQueries": [
+      "Perfumarte - Jr. Puno 01 Jr. Puno 542 - Galería Puno, Lima 15001, Peru",
+      "Perfumarte - Jr. Puno 01",
+      "Perfumarte Jr. Puno 542 - Galería Puno Lima"
+    ]
   },
   {
     "storeCode": "06241745536898984752",
@@ -60,7 +70,7 @@
     "name": "Perfumarte Perú",
     "address": "Jiron Ayacucho 739, Lima 15001, Peru",
     "placeId": null,
-    "activa": true,
+    "activa": false,
     "nota": "Marcada como cerrada por Google"
   },
   {
@@ -108,7 +118,7 @@
     "name": "Perfumarte - Los Olivos",
     "address": "Av. Alfredo Mendiola 3765, Los Olivos 15311, Lima, Peru",
     "placeId": null,
-    "activa": true
+    "activa": false
   },
   {
     "storeCode": "11651168135345126387",
@@ -140,10 +150,15 @@
   },
   {
     "storeCode": "14760098416601218861",
-    "name": "Perfumarte - Jr. de la Unión 2",
+    "name": "Perfumarte - Jr. de la Unión 02",
     "address": "Jirón de la Unión 419, Lima 15001, Peru",
     "placeId": null,
-    "activa": true
+    "activa": true,
+    "searchQueries": [
+      "Perfumarte - Jr. de la Unión 02 Jirón de la Unión 419, Lima 15001, Peru",
+      "Perfumarte - Jr. de la Unión 02",
+      "Perfumarte Jirón de la Unión 419 Lima"
+    ]
   },
   {
     "storeCode": "14781804421642096911",
