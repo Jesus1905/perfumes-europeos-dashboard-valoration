@@ -91,6 +91,16 @@ async function main() {
   const cache = await leerJSON(cacheFile, {});
   const historico = await leerJSON(histFile, []);
 
+  // Ejecución de respaldo: si ya hay captura completa de hoy, no hace nada.
+  if (process.env.SOLO_SI_FALTA === 'true') {
+    const activas = tiendas.filter(t => t.activa !== false).length;
+    const deHoy = historico.filter(f => f.fecha === HOY).length;
+    if (deHoy >= activas) {
+      console.log(`Ya existe la captura de hoy (${HOY}, ${deHoy} tiendas). Respaldo sin cambios.`);
+      return;
+    }
+  }
+
   const filas = [];
   const errores = [];
   const usados = new Map(); // place_id -> tienda que ya lo usa

@@ -2,7 +2,8 @@ name: Captura diaria de valoraciones
 
 on:
   schedule:
-    - cron: '0 11 * * *'   # 11:00 UTC = 06:00 hora de Lima
+    - cron: '23 10 * * *'   # 10:23 UTC = 05:23 hora de Lima (captura principal)
+    - cron: '23 13 * * *'   # 13:23 UTC = 08:23 hora de Lima (respaldo: solo si la principal no corrió)
   workflow_dispatch:        # botón "Run workflow" para correrlo a mano
 
 permissions:
@@ -17,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar el repo (rama main)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Preparar la rama data (donde vive el histórico)
         run: |
@@ -35,14 +36,15 @@ jobs:
           fi
 
       - name: Instalar Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Consultar Google y actualizar el histórico
         env:
           GOOGLE_PLACES_KEY: ${{ secrets.GOOGLE_PLACES_KEY }}
           OUT_DIR: data-branch
+          SOLO_SI_FALTA: ${{ github.event.schedule == '23 13 * * *' }}
         run: node scripts/capturar.mjs
 
       - name: Guardar el histórico en la rama data
