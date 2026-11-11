@@ -354,7 +354,7 @@
     Última actualización<br>
     <span id="last-updated">—</span>
     <br><br>
-    <button class="btn-refresh" id="btn-load" onclick="startLoad()">Cargar datos</button>
+    <button class="btn-refresh" id="btn-load" onclick="onRefreshClick()">Cargar datos</button>
   </div>
 </header>
 
@@ -957,16 +957,26 @@ const HISTORICO_URL = 'https://raw.githubusercontent.com/Jesus1905/perfumes-euro
 
 let evo = { rows: null, gran: 'dia', range: '30', store: 'all', chart: null, loading: false };
 
+function onRefreshClick() {
+  if (!document.getElementById('page-evolutivo').hidden) { evo.rows = null; loadEvolutivo(); }
+  else startLoad();
+}
+
 function showPage(page) {
   if (page !== 'evolutivo') page = 'home';
   document.getElementById('page-home').hidden = page !== 'home';
   document.getElementById('page-evolutivo').hidden = page !== 'evolutivo';
   document.querySelectorAll('.nav-tab').forEach(a => a.classList.toggle('active', a.dataset.page === page));
-  document.querySelector('.header-meta').style.visibility = page === 'home' ? 'visible' : 'hidden';
+  const btn = document.getElementById('btn-load');
+  if (page === 'evolutivo') { btn.dataset.homeText = btn.dataset.homeText || btn.textContent; btn.textContent = 'Actualizar histórico'; btn.disabled = false; }
+  else if (btn.dataset.homeText) { btn.textContent = btn.dataset.homeText; }
+  const lu = document.getElementById('last-updated');
+  if (page === 'evolutivo') { if (!lu.dataset.evo) { lu.dataset.home = lu.textContent; lu.dataset.evo = '1'; } lu.textContent = evo.capturaTxt || '—'; }
+  else if (lu.dataset.evo) { lu.textContent = lu.dataset.home || '—'; delete lu.dataset.evo; }
   document.getElementById('footer-text').textContent = page === 'home'
     ? 'Datos en tiempo real desde Google Places API · Perfumarte'
     : 'Histórico capturado cada día a las 6:00 a.m. (hora de Lima) · Perfumarte';
-  if (page === 'evolutivo') loadEvolutivo();
+  if (page === 'evolutivo') { evo.rows = null; loadEvolutivo(); }
 }
 
 window.addEventListener('hashchange', () => showPage(location.hash.slice(1)));
@@ -1015,12 +1025,17 @@ async function loadEvolutivo() {
     const data = await r.json();
     evo.rows = data.map(x => ({ ...x, fecha_corte: x.fecha_corte || diaAnterior(x.fecha), resenas: Number(x.resenas) || 0, rating: x.rating == null ? null : Number(x.rating) }));
     const sel = document.getElementById('evo-store');
+    sel.querySelectorAll('option:not([value=all])').forEach(o => o.remove());
     const nombres = new Map();
     evo.rows.forEach(x => nombres.set(x.codigo, x.tienda));
     STORES.forEach(s => nombres.set(s.storeCode, s.name));
     [...nombres.entries()].filter(([c]) => evo.rows.some(x => x.codigo === c))
       .sort((a, b) => corto(a[1]).localeCompare(corto(b[1]), 'es'))
       .forEach(([c, n]) => sel.insertAdjacentHTML('beforeend', `<option value="${escapeHTML(c)}">${escapeHTML(corto(n))}</option>`));
+    if ([...sel.options].some(o => o.value === evo.store)) sel.value = evo.store; else { evo.store = 'all'; sel.value = 'all'; }
+    const ult = evo.rows.reduce((m, x) => (x.capturado || '') > m ? x.capturado : m, '');
+    evo.capturaTxt = ult ? 'Captura del ' + new Date(ult).toLocaleString('es-PE', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
+    if (!document.getElementById('page-evolutivo').hidden) document.getElementById('last-updated').textContent = evo.capturaTxt;
     renderEvolutivo();
   } catch (e) {
     console.error(e);
